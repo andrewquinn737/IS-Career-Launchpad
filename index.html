@@ -109,9 +109,6 @@
   }
   .place-btn-find { background: linear-gradient(150deg, var(--accent), var(--accent-strong)); }
   .place-btn-earn { background: linear-gradient(150deg, var(--accent-strong), #001428); }
-  .place-btn-top { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-  .place-btn-num { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; font-weight: 600; opacity: 0.75; }
-  .place-btn-arrow { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; font-size: 1.1rem; }
   .place-btn-body { position: relative; z-index: 1; }
   .place-btn-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; opacity: 0.75; text-transform: uppercase; }
   .place-btn-label { font-family: "Sora", sans-serif; font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.1rem); margin: 0.4rem 0 0.65rem; letter-spacing: -0.02em; }
@@ -160,35 +157,38 @@
   .module-content { padding: 2.4rem 2.6rem; min-width: 0; }
   @media (max-width: 860px) { .module-side, .module-content { padding: 1.8rem 1.5rem; } }
 
-  /* ---- Career explorer ---- */
-  .career-menu { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1.75rem; }
-  .career-menu button {
-    display: grid; grid-template-columns: 36px 1fr 16px; gap: 0.65rem; align-items: center; padding: 0.7rem;
-    border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--ink-muted); text-align: left; cursor: pointer;
+  /* ---- Career explorer: simple grid + detail panel ---- */
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  .role-card {
+    text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.15rem 1.25rem 1.25rem; cursor: pointer; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 0.65rem; transition: border-color 0.15s ease, transform 0.15s ease;
   }
-  .career-menu button:hover, .career-menu button.active { background: var(--surface); border-color: var(--border); color: var(--ink); }
-  .career-menu button.active { box-shadow: var(--shadow); }
-  .career-menu .mono-chip { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--surface-2); color: var(--accent-strong); font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; font-weight: 700; }
-  .career-menu button.active .mono-chip { background: var(--accent); color: #fff; }
-  .career-menu b { display: block; font-size: 0.85rem; font-family: "Sora", sans-serif; }
-  .career-menu small { display: block; margin-top: 0.15rem; font-size: 0.72rem; color: var(--ink-muted); }
-  .career-menu i { font-style: normal; opacity: 0.5; }
-
-  .profile-head { display: flex; justify-content: space-between; gap: 2rem; flex-wrap: wrap; align-items: flex-start; margin-bottom: 1.75rem; }
-  .profile-head h2 { font-size: 2rem; margin: 0.4rem 0 0.5rem; letter-spacing: -0.02em; }
-  .profile-head .hook { max-width: 52ch; color: var(--ink-muted); margin: 0; font-size: 1.02rem; }
-  .fit-scales { display: flex; flex-direction: column; gap: 0.9rem; min-width: 160px; }
-  .fit-scale-row div:first-child { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); }
-  .fit-scale-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 0.4rem; }
-  .fit-scale-bar i { height: 6px; border-radius: 99px; background: var(--surface-2); font-style: normal; }
-  .fit-scale-bar i.on { background: var(--accent); }
-
-  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem 2.25rem; }
-  @media (max-width: 620px) { .profile-grid { grid-template-columns: 1fr; } }
-  .profile-block h4 { font-size: 0.95rem; margin: 0 0 0.6rem; }
-  .profile-block p { margin: 0.4rem 0; color: var(--ink-muted); font-size: 0.9rem; }
+  .role-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .role-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .role-card h3 { font-size: 1.08rem; margin: 0; }
+  .role-card .hook { color: var(--ink-muted); font-size: 0.88rem; margin: 0; flex: 1; }
+  .role-card .salary-badge {
+    align-self: flex-start; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 600;
+    background: var(--accent-tint); color: var(--accent-strong); padding: 0.25rem 0.55rem; border-radius: 999px;
+  }
   .tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .tag { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 500; background: var(--surface-2); color: var(--ink-muted); border: 1px solid var(--border); padding: 0.25rem 0.55rem; border-radius: 6px; white-space: nowrap; }
+
+  .back-link {
+    background: none; border: none; cursor: pointer; font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem; font-weight: 600; color: var(--ink-muted); padding: 0; margin-bottom: 1.25rem;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .back-link:hover { color: var(--accent-strong); }
+  .detail h2 { font-size: 1.7rem; margin: 0 0 0.25rem; }
+  .detail .hook { color: var(--ink-muted); font-size: 1.05rem; margin: 0 0 1.75rem; max-width: 60ch; }
+  .detail-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem; align-items: start; }
+  @media (max-width: 720px) { .detail-grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.35rem 1.5rem; margin-bottom: 1.25rem; box-shadow: var(--shadow); }
+  .panel h4.eyebrow { margin: 0 0 0.75rem; }
+  .panel p { margin: 0.4rem 0; color: var(--ink-muted); font-size: 0.9rem; }
+  .panel p:first-child { margin-top: 0; }
 
   .career-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1.75rem 0; }
   @media (max-width: 620px) { .career-facts { grid-template-columns: 1fr; } }
@@ -319,7 +319,6 @@
       <p class="hero-sub">Every IS career path leads somewhere different. Find the one that's actually yours &mdash; then prove you're ready for it.</p>
       <div class="place-buttons">
         <button class="place-btn place-btn-find" id="goDiscover">
-          <div class="place-btn-top"><span class="place-btn-num mono">01</span><span class="place-btn-arrow">&#8599;</span></div>
           <div class="place-btn-body">
             <span class="place-btn-tag">I'm still exploring</span>
             <div class="place-btn-label">Find Your Place</div>
@@ -328,10 +327,9 @@
           <div class="place-btn-cta"><span>Take the career test</span><span>&rarr;</span></div>
         </button>
         <button class="place-btn place-btn-earn" id="goPrep">
-          <div class="place-btn-top"><span class="place-btn-num mono">02</span><span class="place-btn-arrow">&#8599;</span></div>
           <div class="place-btn-body">
             <span class="place-btn-tag">I know where I'm headed</span>
-            <div class="place-btn-label">Earn Your Place</div>
+            <div class="place-btn-label">Secure Your Place</div>
             <p class="place-btn-desc">Pick a role, answer real interview questions, and get specific feedback on how to improve each one.</p>
           </div>
           <div class="place-btn-cta"><span>Start a mock interview</span><span>&rarr;</span></div>
@@ -347,15 +345,8 @@
 
   <!-- ============ EXPLORE ============ -->
   <section id="viewExplore" class="view">
-    <div class="module-shell">
-      <div class="module-side">
-        <span class="eyebrow">Six ways to do IS</span>
-        <h3>Find a path worth exploring.</h3>
-        <p>Every track below covers what the job actually looks like, what it pays early on, and what makes someone stand out for it.</p>
-        <div class="career-menu" id="careerMenu"></div>
-      </div>
-      <div class="module-content" id="exploreContent"></div>
-    </div>
+    <div id="roleGrid" class="role-grid"></div>
+    <div id="roleDetail" style="display:none;"></div>
   </section>
 
   <!-- ============ CAREER TEST ============ -->
@@ -701,7 +692,7 @@
     Object.entries(views).forEach(([key, el]) => el.classList.toggle("active", key === mode));
     modesNav.classList.toggle("visible", mode !== "home");
     Object.entries(tabs).forEach(([key, el]) => el.classList.toggle("active", key === mode));
-    if (mode === "explore") renderExplore((opts && opts.roleId) || currentExploreId);
+    if (mode === "explore") { if (opts && opts.roleId) openDetail(opts.roleId); else closeDetail(); }
     if (mode === "discover") renderQuiz();
     if (mode === "prep") renderInterview((opts && opts.roleId) || currentPrepId);
     if (mode !== "home") window.scrollTo({ top: 0, behavior: "smooth" });
@@ -723,62 +714,64 @@
   });
 
   // ---------------------------------------------------------------
-  // Explore module
+  // Explore module — plain grid of cards, click through to a detail panel.
   // ---------------------------------------------------------------
-  let currentExploreId = ROLES[0].id;
-  const careerMenu = document.getElementById("careerMenu");
-  const exploreContent = document.getElementById("exploreContent");
+  const roleGrid = document.getElementById("roleGrid");
+  const roleDetail = document.getElementById("roleDetail");
 
-  careerMenu.innerHTML = ROLES.map((r) => `
-    <button data-role="${r.id}" class="${r.id === currentExploreId ? "active" : ""}">
-      <span class="mono-chip">${r.short}</span>
-      <span><b>${r.title}</b><small>${r.hook}</small></span>
-      <i>&rarr;</i>
-    </button>
-  `).join("");
-  careerMenu.querySelectorAll("button").forEach((btn) => {
-    btn.addEventListener("click", () => renderExplore(btn.dataset.role));
-  });
-
-  function renderExplore(id) {
-    currentExploreId = id;
-    const r = roleById(id);
-    careerMenu.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.role === id));
-
-    exploreContent.innerHTML = `
-      <div class="profile-head">
-        <div>
-          <span class="eyebrow">Your place: ${r.short}</span>
-          <h2>${r.title}</h2>
-          <p class="hook">${r.hook}</p>
-        </div>
-        <div class="fit-scales">
-          ${fitScale("Technical", r.technical)}
-          ${fitScale("People", r.people)}
-        </div>
-      </div>
-      <div class="profile-grid">
-        <div class="profile-block"><h4 class="eyebrow">What you actually do</h4>${r.dayToDay.split(". ").filter(Boolean).map((s) => `<p>&#10003; ${s.trim().replace(/\.$/, "")}.</p>`).join("")}</div>
-        <div class="profile-block"><h4 class="eyebrow">Your toolkit</h4><div class="tag-row">${r.skills.map((s) => `<span class="tag">${s}</span>`).join("")}</div></div>
-        <div class="profile-block"><h4 class="eyebrow">What interns should know</h4>${r.entryExpectations.map((e) => `<p>&#10003; ${e}</p>`).join("")}</div>
-        <div class="profile-block"><h4 class="eyebrow">How to stand out</h4><p>${r.strongCandidate}</p></div>
-      </div>
-      <div class="career-facts">
-        <div><small class="mono">SALARY</small><p>${money(r.salary[0])}&ndash;${money(r.salary[1])} entry &mdash; general estimate.</p></div>
-        <div><small class="mono">GROWTH</small><p>${r.salary[2]}</p></div>
-        <div class="wide"><small class="mono">SOURCE</small><p><a href="${r.source.url}" target="_blank" rel="noreferrer">${r.source.label} &#8599;</a></p></div>
-      </div>
-      <div class="challenge">
-        <span class="mono">TRY THE JOB &middot; 60 SECONDS</span>
-        <h4>${r.challenge}</h4>
-        <div class="challenge-actions"><button class="btn-primary" id="explorePracticeBtn">Practice this interview &rarr;</button></div>
-      </div>
-    `;
-    document.getElementById("explorePracticeBtn").addEventListener("click", () => switchMode("prep", { roleId: id }));
+  function renderGrid() {
+    roleGrid.innerHTML = ROLES.map((r) => `
+      <button class="role-card" data-role="${r.id}">
+        <h3>${r.title}</h3>
+        <p class="hook">${r.hook}</p>
+        <span class="salary-badge mono">${money(r.salary[0])}&ndash;${money(r.salary[1])} entry</span>
+        <div class="tag-row">${r.skills.slice(0, 3).map((s) => `<span class="tag">${s}</span>`).join("")}</div>
+      </button>
+    `).join("");
+    roleGrid.querySelectorAll(".role-card").forEach((card) => {
+      card.addEventListener("click", () => openDetail(card.dataset.role));
+    });
   }
 
-  function fitScale(label, value) {
-    return `<div class="fit-scale-row"><div><span>${label}</span><span>${value}/5</span></div><div class="fit-scale-bar">${[1,2,3,4,5].map((n) => `<i class="${n <= value ? "on" : ""}"></i>`).join("")}</div></div>`;
+  function openDetail(id) {
+    const r = roleById(id);
+    roleDetail.innerHTML = `
+      <button class="back-link" id="backToGrid">&larr; All careers</button>
+      <div class="detail">
+        <h2>${r.title}</h2>
+        <p class="hook">${r.hook}</p>
+        <div class="detail-grid">
+          <div>
+            <div class="panel"><h4 class="eyebrow">A typical day</h4><p>${r.dayToDay}</p></div>
+            <div class="panel"><h4 class="eyebrow">What entry-level candidates are expected to know</h4>${r.entryExpectations.map((e) => `<p>&#10003; ${e}</p>`).join("")}</div>
+            <div class="panel"><h4 class="eyebrow">What makes a strong candidate</h4><p>${r.strongCandidate}</p></div>
+          </div>
+          <div>
+            <div class="panel"><h4 class="eyebrow">Skills &amp; tools</h4><div class="tag-row">${r.skills.map((s) => `<span class="tag">${s}</span>`).join("")}</div></div>
+            <div class="career-facts">
+              <div><small class="mono">SALARY</small><p>${money(r.salary[0])}&ndash;${money(r.salary[1])} entry &mdash; general estimate.</p></div>
+              <div><small class="mono">GROWTH</small><p>${r.salary[2]}</p></div>
+              <div class="wide"><small class="mono">SOURCE</small><p><a href="${r.source.url}" target="_blank" rel="noreferrer">${r.source.label} &#8599;</a></p></div>
+            </div>
+            <div class="challenge">
+              <span class="mono">TRY THE JOB &middot; 60 SECONDS</span>
+              <h4>${r.challenge}</h4>
+              <div class="challenge-actions"><button class="btn-primary" id="explorePracticeBtn">Practice this interview &rarr;</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    roleGrid.style.display = "none";
+    roleDetail.style.display = "block";
+    document.getElementById("backToGrid").addEventListener("click", closeDetail);
+    document.getElementById("explorePracticeBtn").addEventListener("click", () => switchMode("prep", { roleId: id }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function closeDetail() {
+    roleDetail.style.display = "none";
+    roleGrid.style.display = "grid";
   }
 
   // ---------------------------------------------------------------
@@ -1000,7 +993,7 @@
   // ---------------------------------------------------------------
   // Init
   // ---------------------------------------------------------------
-  renderExplore(currentExploreId);
+  renderGrid();
 </script>
 </body>
 </html>
