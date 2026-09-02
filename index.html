@@ -8,47 +8,48 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" />
 <style>
   :root {
-    --bg: #f2f5f6;
+    /* BYU Marriott Information Systems palette (marriott.byu.edu/infosys) */
+    --bg: #f5f7f7;
     --surface: #ffffff;
-    --surface-2: #e9eef0;
-    --border: #d7dfe2;
-    --ink: #16212b;
-    --ink-muted: #55636e;
-    --accent: #1f7a6c;
-    --accent-strong: #14584e;
-    --accent-tint: #e2f1ee;
-    --amber: #c97a1f;
-    --amber-tint: #f7ead4;
-    --shadow: 0 1px 2px rgba(22,33,43,0.06), 0 8px 24px rgba(22,33,43,0.06);
+    --surface-2: #e5e7e7;
+    --border: #cad0d6;
+    --ink: #1c2530;
+    --ink-muted: #5b6570;
+    --accent: #0e62ae;
+    --accent-strong: #002e5d;
+    --accent-tint: #e3e9ea;
+    --highlight: #0077c8;
+    --highlight-tint: #e5f1fb;
+    --shadow: 0 1px 2px rgba(0,32,64,0.07), 0 8px 24px rgba(0,32,64,0.07);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0d1417;
-      --surface: #141d21;
-      --surface-2: #1a2529;
-      --border: #263135;
-      --ink: #eef2f2;
-      --ink-muted: #a7b3b6;
-      --accent: #3aab95;
-      --accent-strong: #56c3ac;
-      --accent-tint: #17302c;
-      --amber: #e2a04c;
-      --amber-tint: #2e2517;
+      --bg: #0a141d;
+      --surface: #111d29;
+      --surface-2: #172634;
+      --border: #24374a;
+      --ink: #eef2f5;
+      --ink-muted: #93a6b6;
+      --accent: #4a9fe0;
+      --accent-strong: #7dbdec;
+      --accent-tint: #142e3e;
+      --highlight: #4fc0f0;
+      --highlight-tint: #123246;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0d1417;
-    --surface: #141d21;
-    --surface-2: #1a2529;
-    --border: #263135;
-    --ink: #eef2f2;
-    --ink-muted: #a7b3b6;
-    --accent: #3aab95;
-    --accent-strong: #56c3ac;
-    --accent-tint: #17302c;
-    --amber: #e2a04c;
-    --amber-tint: #2e2517;
+    --bg: #0a141d;
+    --surface: #111d29;
+    --surface-2: #17263d;
+    --border: #24374a;
+    --ink: #eef2f5;
+    --ink-muted: #93a6b6;
+    --accent: #4a9fe0;
+    --accent-strong: #7dbdec;
+    --accent-tint: #142e3e;
+    --highlight: #4fc0f0;
+    --highlight-tint: #123246;
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
   }
 
@@ -77,30 +78,51 @@
 
   .wrap { max-width: 980px; margin: 0 auto; padding: 2.75rem 1.5rem 5rem; }
 
-  header.top { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 2.25rem; }
-  header.top h1 { font-size: clamp(2rem, 4.5vw, 2.75rem); font-weight: 700; margin: 0.35rem 0 0; letter-spacing: -0.01em; }
-  header.top h1 .is-pop { color: var(--accent-strong); }
-  header.top .sub { max-width: 62ch; color: var(--ink-muted); margin: 0; font-size: 1.05rem; }
-  header.top .meta {
-    display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.4rem;
-    font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--ink-muted);
+  /* ---- Home hero ---- */
+  .hero { padding: 3.5rem 0 2.5rem; text-align: center; }
+  .hero h1 { font-size: clamp(2.75rem, 8vw, 4.5rem); font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+  .hero h1 .is-pop { color: var(--accent); }
+  .hero-sub { max-width: 46ch; margin: 1.1rem auto 0; color: var(--ink-muted); font-size: 1.15rem; }
+
+  .place-buttons { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; margin-top: 2.75rem; }
+  .place-btn {
+    width: 260px; text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.5rem 1.6rem; cursor: pointer; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 0.6rem;
+    transition: transform 0.15s ease, border-color 0.15s ease;
   }
-  header.top .meta strong { color: var(--ink); font-weight: 600; }
+  .place-btn:hover { transform: translateY(-3px); }
+  .place-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .place-btn svg { width: 26px; height: 26px; }
+  .place-btn-label { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1.15rem; }
+  .place-btn-sub { font-family: "IBM Plex Mono", monospace; font-size: 0.76rem; color: var(--ink-muted); }
+  .place-btn-find { border-top: 3px solid var(--accent); }
+  .place-btn-find svg { color: var(--accent); }
+  .place-btn-find:hover { border-color: var(--accent); }
+  .place-btn-earn { border-top: 3px solid var(--accent-strong); }
+  .place-btn-earn svg { color: var(--accent-strong); }
+  .place-btn-earn:hover { border-color: var(--accent-strong); }
 
   nav.modes {
-    display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border);
+    display: none; align-items: center; gap: 0.25rem; border-bottom: 1px solid var(--border);
     margin-bottom: 2rem; position: sticky; top: 0; background: var(--bg);
     padding-top: 0.25rem; z-index: 5;
   }
-  nav.modes button {
+  nav.modes.visible { display: flex; }
+  nav.modes .wordmark {
+    background: none; border: none; cursor: pointer; font-family: "Sora", sans-serif; font-weight: 700;
+    font-size: 1rem; color: var(--ink); padding: 0.75rem 0.25rem;
+  }
+  nav.modes .wordmark .is-pop { color: var(--accent); }
+  nav.modes .modes-spacer { flex: 1; }
+  nav.modes button:not(.wordmark) {
     background: none; border: none; cursor: pointer;
     font-family: "Sora", sans-serif; font-weight: 600; font-size: 0.95rem;
-    color: var(--ink-muted); padding: 0.75rem 0.25rem; margin-right: 1.75rem;
+    color: var(--ink-muted); padding: 0.75rem 0.25rem; margin-left: 1.75rem;
     border-bottom: 2px solid transparent; position: relative; top: 1px;
     transition: color 0.15s ease;
   }
-  nav.modes button:hover { color: var(--ink); }
-  nav.modes button.active { color: var(--ink); border-bottom-color: var(--amber); }
+  nav.modes button:not(.wordmark):hover { color: var(--ink); }
+  nav.modes button.active { color: var(--ink); border-bottom-color: var(--highlight); }
   nav.modes button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   section.view { display: none; }
@@ -153,7 +175,7 @@
 
   .salary-scale { margin-top: 0.9rem; }
   .salary-track { height: 8px; border-radius: 999px; background: var(--surface-2); position: relative; overflow: hidden; }
-  .salary-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--amber)); border-radius: 999px; }
+  .salary-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--highlight)); border-radius: 999px; }
   .salary-labels { display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; margin-top: 0.4rem; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
   .salary-labels strong { color: var(--ink); }
   .data-note { font-size: 0.76rem; color: var(--ink-muted); margin-top: 0.9rem; font-family: "IBM Plex Mono", monospace; line-height: 1.5; }
@@ -195,11 +217,11 @@
   .saved-hint { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--ink-muted); opacity: 0; transition: opacity 0.3s ease; }
   .saved-hint.show { opacity: 1; }
   .strong-answer {
-    display: none; margin-top: 0.9rem; padding: 0.9rem 1.05rem; background: var(--amber-tint);
-    border-radius: 8px; border-left: 3px solid var(--amber); font-size: 0.92rem;
+    display: none; margin-top: 0.9rem; padding: 0.9rem 1.05rem; background: var(--highlight-tint);
+    border-radius: 8px; border-left: 3px solid var(--highlight); font-size: 0.92rem;
   }
   .strong-answer.open { display: block; }
-  .strong-answer .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.4rem; }
+  .strong-answer .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--highlight); display: block; margin-bottom: 0.4rem; }
 
   footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--ink-muted); font-size: 0.8rem; font-family: "IBM Plex Mono", monospace; }
 </style>
@@ -207,24 +229,35 @@
 <body>
 <div class="wrap">
 
-  <header class="top">
-    <span class="eyebrow">BYU Information Systems · Junior Core Case Competition · IS Career Launchpad</span>
-    <h1>this<span class="is-pop">IS</span>yourplace</h1>
-    <p class="sub">Explore where an IS degree actually leads, then practice the interview before it counts. Built for incoming IS students figuring out what to aim for &mdash; and how to get there.</p>
-    <div class="meta">
-      <span><strong>6</strong> career paths</span>
-      <span><strong>36</strong> interview questions</span>
-      <span>Prototype &mdash; v1</span>
-    </div>
-  </header>
-
-  <nav class="modes">
-    <button id="tabDiscover" class="active">Explore Careers</button>
-    <button id="tabPrep">Interview Prep</button>
+  <nav class="modes" id="modesNav">
+    <button id="navHome" class="wordmark">this<span class="is-pop">IS</span>yourplace</button>
+    <span class="modes-spacer"></span>
+    <button id="tabDiscover">Find Your Place</button>
+    <button id="tabPrep">Earn Your Place</button>
   </nav>
 
+  <!-- ============ HOME ============ -->
+  <section id="viewHome" class="view active">
+    <div class="hero">
+      <h1>this<span class="is-pop">IS</span>yourplace</h1>
+      <p class="hero-sub">Every IS career path leads somewhere different. Find the one that's actually yours &mdash; then prove you're ready for it.</p>
+      <div class="place-buttons">
+        <button class="place-btn place-btn-find" id="goDiscover">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.2 7.8 13.6 13.6 7.8 16.2 10.4 10.4 16.2 7.8"/></svg>
+          <span class="place-btn-label">Find Your Place</span>
+          <span class="place-btn-sub">6 real IS career paths</span>
+        </button>
+        <button class="place-btn place-btn-earn" id="goPrep">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.6L21 9.3l-5 4.5 1.5 7.1L12 17.3l-5.5 3.6L8 13.8l-5-4.5 6.4-0.7L12 2z"/></svg>
+          <span class="place-btn-label">Earn Your Place</span>
+          <span class="place-btn-sub">36 real interview questions</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ DISCOVER ============ -->
-  <section id="viewDiscover" class="view active">
+  <section id="viewDiscover" class="view">
     <div id="roleGrid" class="role-grid"></div>
     <div id="roleDetail" style="display:none;"></div>
   </section>
@@ -237,7 +270,7 @@
   </section>
 
   <footer>
-    Career outlook and salary figures are general, order-of-magnitude estimates drawn from common industry reporting (roles like these typically publish ranges via sources such as BLS OES data, Levels.fyi, and Glassdoor aggregates) &mdash; not a single live data feed. Treat them as a starting point for research, not a quote. &middot; Answers you type in Interview Prep are saved locally in your browser only.
+    A prototype built for the BYU Information Systems Junior Core Case Competition &mdash; IS Career Launchpad. Career outlook and salary figures are general, order-of-magnitude estimates drawn from common industry reporting (roles like these typically publish ranges via sources such as BLS OES data, Levels.fyi, and Glassdoor aggregates) &mdash; not a single live data feed. Treat them as a starting point for research, not a quote. &middot; Answers you type in Interview Prep are saved locally in your browser only.
   </footer>
 
 </div>
@@ -527,22 +560,34 @@
   }
 
   // ---------------------------------------------------------------
-  // Mode tabs
+  // Mode switching: home (the "find your place / earn your place" landing)
+  // plus the two tool views. Home hides the persistent nav; either tool
+  // view shows it, so there's always a way back.
   // ---------------------------------------------------------------
+  const modesNav = document.getElementById("modesNav");
+  const navHome = document.getElementById("navHome");
   const tabDiscover = document.getElementById("tabDiscover");
   const tabPrep = document.getElementById("tabPrep");
+  const goDiscover = document.getElementById("goDiscover");
+  const goPrep = document.getElementById("goPrep");
+  const viewHome = document.getElementById("viewHome");
   const viewDiscover = document.getElementById("viewDiscover");
   const viewPrep = document.getElementById("viewPrep");
 
+  navHome.addEventListener("click", () => switchMode("home"));
   tabDiscover.addEventListener("click", () => switchMode("discover"));
   tabPrep.addEventListener("click", () => switchMode("prep"));
+  goDiscover.addEventListener("click", () => switchMode("discover"));
+  goPrep.addEventListener("click", () => switchMode("prep"));
 
   function switchMode(mode) {
-    const toDiscover = mode === "discover";
-    tabDiscover.classList.toggle("active", toDiscover);
-    tabPrep.classList.toggle("active", !toDiscover);
-    viewDiscover.classList.toggle("active", toDiscover);
-    viewPrep.classList.toggle("active", !toDiscover);
+    viewHome.classList.toggle("active", mode === "home");
+    viewDiscover.classList.toggle("active", mode === "discover");
+    viewPrep.classList.toggle("active", mode === "prep");
+    modesNav.classList.toggle("visible", mode !== "home");
+    tabDiscover.classList.toggle("active", mode === "discover");
+    tabPrep.classList.toggle("active", mode === "prep");
+    if (mode !== "home") window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   // ---------------------------------------------------------------
