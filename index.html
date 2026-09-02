@@ -69,7 +69,7 @@
   /* ---- Nav ---- */
   nav.modes {
     display: none; align-items: center; gap: 0.25rem; border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; background: var(--bg); z-index: 20; padding: 0.9rem 1.5rem;
+    position: sticky; top: 0; background: var(--bg); z-index: 20; padding: 1.4rem 1.5rem 1.1rem;
   }
   nav.modes.visible { display: flex; }
   nav.modes .wordmark { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1rem; color: var(--ink); padding: 0.4rem; }
@@ -379,7 +379,7 @@
 
 <script>
   // ---------------------------------------------------------------
-  // Data: six IS career paths.
+  // Data: eight IS career paths.
   // ---------------------------------------------------------------
   const ROLES = [
     {
@@ -597,6 +597,78 @@
         { q: "What's the difference between UX and UI?", keywords: ["ux", "ui", "experience", "interface", "flow"],
           a: "UX is the overall experience — whether the product solves the user's problem, and how the flow and structure feel. UI is the visual and interactive surface — buttons, layout, typography. Good UI can't fix bad UX, but bad UI can undermine good UX. A concrete example helps: a beautifully designed checkout form (strong UI) is still bad UX if it asks for information in an order that doesn't match how people think through a purchase." }
       ]
+    },
+    {
+      id: "erp", short: "ERP",
+      title: "ERP / Systems Consultant",
+      hook: "Configure the business software that runs finance, supply chain, or sales for an entire company.",
+      technical: 4, people: 3,
+      dayToDay: "Configuring and customizing platforms like SAP or Salesforce to match a client's business processes, running workshops with client stakeholders to gather requirements, writing functional specs for developers, testing configured workflows before go-live, and training end users on the new system.",
+      skills: ["SAP or Salesforce platform basics", "Business process mapping", "Requirements gathering", "Configuration (low-code)", "SQL basics", "Client communication"],
+      entryExpectations: [
+        "Comfortable learning a large, complex platform quickly — most training happens on the job",
+        "Can map a client's current process before proposing a configured solution",
+        "Basic scripting/configuration skills (e.g. Salesforce Flow or SAP fundamentals) are a plus, not required",
+        "Strong communication — the job is translating business needs into system configuration",
+        "A relevant certification (Salesforce Administrator, SAP fundamentals) is a strong entry signal"
+      ],
+      salary: { entry: [62000, 85000], mid: [95000, 125000], high: [140000, 175000] },
+      growth: "Growth path: Associate Consultant → Consultant → Senior Consultant → Solution Architect or Practice Lead.",
+      strongCandidate: "Picks up new platform features quickly and is comfortable saying \"I don't know yet, let me find out.\" Balances what the client wants against what the platform can actually do well, instead of forcing a bad fit.",
+      challenge: "A client wants a custom approval workflow that doesn't match the platform's standard process. Walk through how you'd evaluate whether to configure a workaround or push back.",
+      source: { label: "O*NET: Management Analysts", url: "https://www.onetonline.org/link/summary/13-1111.00" },
+      behavioral: [
+        { q: "Tell me about a time you had to learn a new tool or system quickly to get a project done.", keywords: ["learn", "platform", "quickly", "resource", "documentation"],
+          a: "Show your actual learning process — official docs, sandbox testing, asking a specific person, structured trial and error — not just \"I figured it out.\" End with how fast you got productive and what you'd do differently to ramp up faster next time." },
+        { q: "Describe a time a client or stakeholder asked for something the system couldn't easily do.", keywords: ["client", "constraint", "alternative", "tradeoff", "configure"],
+          a: "Show you explained the platform's real constraint honestly instead of overpromising, then proposed a workable alternative — a different configuration, a manual workaround, or a scoped custom build — and how you got the client comfortable with it." },
+        { q: "Tell me about a time you had to explain a technical limitation to a non-technical person.", keywords: ["explain", "plain language", "limitation", "client", "translate"],
+          a: "Focus on the translation — dropping platform jargon for plain business language, using a concrete example instead of an abstract rule, and checking they understood before moving on." }
+      ],
+      technical: [
+        { q: "What's the difference between configuration and customization in a platform like Salesforce or SAP?", keywords: ["configuration", "customization", "code", "standard", "risk"],
+          a: "Configuration: using the platform's built-in settings and tools (point-and-click, standard fields, workflows) — supported and upgrade-safe. Customization: writing custom code (Apex, ABAP) to do something the platform doesn't support out of the box — more powerful, but more risk, cost, and long-term maintenance burden. A strong answer explains why consultants default to configuration first." },
+        { q: "Walk me through how you'd gather requirements for a new client implementation.", keywords: ["requirement", "stakeholder", "process", "workshop", "document"],
+          a: "Interview the actual users doing the process today, not just the manager who requested the project. Map the current process before designing the future one. Document requirements in a form both the client and the implementation team can sign off on, and confirm understanding before configuration starts." },
+        { q: "How would you decide whether a client's request should be a configuration change or a separate custom development project?", keywords: ["scope", "cost", "platform", "standard", "tradeoff"],
+          a: "Check whether the platform supports it natively or with minor configuration first. If not, weigh the cost and complexity of custom development against the business value of the request, and flag long-term maintenance cost — custom code often breaks during platform upgrades in ways standard configuration doesn't." }
+      ]
+    },
+    {
+      id: "cloud", short: "CLD",
+      title: "Cloud / Infrastructure Engineer",
+      hook: "Build and maintain the servers, networks, and pipelines every other application quietly depends on.",
+      technical: 5, people: 2,
+      dayToDay: "Provisioning and maintaining cloud infrastructure on AWS, Azure, or GCP, writing infrastructure-as-code, monitoring system uptime and performance, automating deployment pipelines, and responding when something in production goes down.",
+      skills: ["AWS, Azure, or GCP", "Linux fundamentals", "Infrastructure as code (Terraform)", "CI/CD pipelines", "Networking basics", "Scripting (Python/Bash)"],
+      entryExpectations: [
+        "Comfortable with the Linux command line and basic networking (DNS, load balancers, VPCs)",
+        "Understands the basics of at least one major cloud platform",
+        "Can read and write simple infrastructure-as-code (Terraform, CloudFormation)",
+        "Understands what CI/CD actually automates and why it matters",
+        "A cloud certification (AWS Certified Cloud Practitioner, Azure Fundamentals) is a strong entry signal"
+      ],
+      salary: { entry: [70000, 95000], mid: [110000, 140000], high: [155000, 195000] },
+      growth: "Growth toward senior/cloud infrastructure engineer, DevOps lead, or site reliability engineer (SRE) within a few years.",
+      strongCandidate: "Thinks about failure before it happens — what breaks if this server goes down, not just whether it works today. Comfortable automating something instead of doing it manually twice.",
+      challenge: "A production service goes down at 2am and pages you. Walk through your first five minutes.",
+      source: { label: "BLS: Network and Computer Systems Administrators", url: "https://www.bls.gov/ooh/computer-and-information-technology/network-and-computer-systems-administrators.htm" },
+      behavioral: [
+        { q: "Tell me about a time something broke in production. What did you do?", keywords: ["production", "incident", "diagnose", "fix", "rollback"],
+          a: "Walk through your actual triage order — confirm the scope of impact, check recent changes/deploys first, roll back if that's the fast fix, then dig into root cause once things are stable. End with what you changed afterward (a monitor, an alert, a runbook) so it's less likely to repeat." },
+        { q: "Describe a time you automated something that used to be done manually.", keywords: ["automate", "manual", "script", "time", "reliable"],
+          a: "Name the specific manual task, why it was worth automating (frequency, error-proneness, time cost), and the actual solution — a script, a pipeline step, infrastructure-as-code. A strong answer also mentions how you verified the automation was actually reliable before trusting it." },
+        { q: "Tell me about a time you had to learn a new tool or technology quickly.", keywords: ["learn", "documentation", "tool", "quickly", "hands-on"],
+          a: "Show a real learning process — docs, a sandbox environment, a specific person you asked — and how fast you got to being useful, not just passively reading about it." }
+      ],
+      technical: [
+        { q: "What's the difference between scaling up and scaling out?", keywords: ["vertical", "horizontal", "scale", "load", "capacity"],
+          a: "Scaling up (vertical): adding more resources — CPU, RAM — to a single server. Simple, but has a hard ceiling and a single point of failure. Scaling out (horizontal): adding more servers/instances to share the load. More complex to set up (load balancing, state management) but scales further and is more fault-tolerant. Most modern cloud architecture favors scaling out." },
+        { q: "What is infrastructure as code, and why does it matter?", keywords: ["infrastructure as code", "terraform", "version control", "reproducible", "manual"],
+          a: "Defining servers, networks, and other infrastructure in version-controlled config files (like Terraform) instead of clicking through a cloud console by hand. It matters because it's reproducible (spin up an identical environment reliably), reviewable (changes go through the same process as code), and auditable — manual console changes give you none of that." },
+        { q: "A website is loading slowly for users in Europe but fine in the US. What would you check first?", keywords: ["latency", "region", "cdn", "network", "server location"],
+          a: "Start with geography: is the server or data center located far from those users, driving up network latency? Check for a CDN — is static content being cached close to European users, or served from a single origin every time? Then check regional-specific issues: a degraded route, a regional outage, or DNS resolution problems specific to that geography." }
+      ]
     }
   ];
 
@@ -612,7 +684,9 @@
         ["A dataset that's supposed to answer one specific business question", "data"],
         ["A system that might already be compromised", "sec"],
         ["A timeline that's quietly falling apart and nobody's said so yet", "pm"],
-        ["A feature everyone loves the idea of but nobody's tested with real users", "ux"]
+        ["A feature everyone loves the idea of but nobody's tested with real users", "ux"],
+        ["A business process that needs to fit into software someone else built", "erp"],
+        ["A server that's about to fall over under load", "cloud"]
       ]
     },
     {
@@ -623,7 +697,9 @@
         ["Presenting a dashboard that changes what leadership decides to do", "data"],
         ["Incident response — figuring out what happened and how bad it is", "sec"],
         ["Status check-in — who's blocked, what's at risk, what's next", "pm"],
-        ["User research readout — what people did versus what we assumed", "ux"]
+        ["User research readout — what people did versus what we assumed", "ux"],
+        ["Configuration walkthrough — showing a client how their new system will work", "erp"],
+        ["Architecture review — deciding how a system should scale before it has to", "cloud"]
       ]
     },
     {
@@ -634,7 +710,9 @@
         ["Data-heavy — queries, numbers, and what they mean", "data"],
         ["A translator between technical people and everyone else", "ba"],
         ["Enough to keep a project realistic, not enough to build it myself", "pm"],
-        ["Enough to know what's feasible, but mostly focused on the human side", "ux"]
+        ["Enough to know what's feasible, but mostly focused on the human side", "ux"],
+        ["Technical enough to configure a platform, not enough to write it from scratch", "erp"],
+        ["Very — networks, servers, and infrastructure most days", "cloud"]
       ]
     },
     {
@@ -645,7 +723,9 @@
         ["A number nobody had pulled before, and it changed a real decision", "data"],
         ["A real vulnerability found and closed before anyone exploited it", "sec"],
         ["A project everyone thought would slip landed on time instead", "pm"],
-        ["A design change that measurably made something easier to use", "ux"]
+        ["A design change that measurably made something easier to use", "ux"],
+        ["A client's new system went live without the rollout falling apart", "erp"],
+        ["A system that used to go down now just... doesn't", "cloud"]
       ]
     },
     {
@@ -656,7 +736,9 @@
         ["The one who pulls the data everyone else is just arguing about", "data"],
         ["The one who notices what could go wrong before it does", "sec"],
         ["The one who tracks who owns what and chases people down", "pm"],
-        ["The one who cares most about whether it's good to use", "ux"]
+        ["The one who cares most about whether it's good to use", "ux"],
+        ["The one who learns the tool fastest and shows everyone else how to use it", "erp"],
+        ["The one who worries about what happens if this breaks at scale", "cloud"]
       ]
     }
   ];
