@@ -75,8 +75,7 @@
   nav.modes .wordmark { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1rem; color: var(--ink); padding: 0.4rem; }
   nav.modes .wordmark .is-pop { color: var(--accent); }
   nav.modes .modes-spacer { flex: 1; }
-  nav.modes .nav-note { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; color: var(--ink-muted); text-transform: uppercase; margin-right: 1rem; }
-  @media (max-width: 640px) { nav.modes .nav-note { display: none; } }
+  nav.modes .nav-divider { color: var(--border); font-weight: 400; margin: 0 0.15rem; }
   nav.modes button:not(.wordmark) {
     background: none; border: none; cursor: pointer; font-family: "Sora", sans-serif; font-weight: 600;
     font-size: 0.92rem; color: var(--ink-muted); padding: 0.6rem 0.9rem; margin-left: 0.25rem;
@@ -126,15 +125,6 @@
   .explore-preview-head h2 { font-size: 1.4rem; margin: 0.4rem 0 0; letter-spacing: -0.01em; }
 
   /* ---- Explorer tabs ---- */
-  .explorer-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
-  .explorer-tabs button {
-    border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--ink-muted);
-    padding: 0.55rem 1.05rem; font-family: "Sora", sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .explorer-tabs button:hover { border-color: var(--accent); color: var(--ink); }
-  .explorer-tabs button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .explorer-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .method { max-width: 760px; margin: 3.5rem auto 1rem; padding: 0 1.5rem; text-align: center; }
   .method h2 { font-size: 1.6rem; margin: 0.5rem 0 0.75rem; }
@@ -309,9 +299,8 @@
 <div class="wrap">
 
   <nav class="modes" id="modesNav">
-    <span class="wordmark">this<span class="is-pop">IS</span>yourplace</span>
+    <span class="wordmark">BYU <span class="nav-divider">|</span> this<span class="is-pop">IS</span>yourplace</span>
     <span class="modes-spacer"></span>
-    <span class="nav-note">BYU Information Systems</span>
     <button id="navHomeBtn">Home</button>
     <button id="tabExplore">Explorer</button>
     <button id="tabDiscover">Career Test</button>
@@ -347,12 +336,18 @@
         <div class="role-grid" id="careerPills"></div>
       </div>
     </div>
+
+    <section class="method">
+      <span class="eyebrow">Research &amp; transparency</span>
+      <h2>Built to help you decide &mdash; not decide for you.</h2>
+      <p>Career-test results are directional, not a psychological assessment. Salary figures are general, order-of-magnitude estimates &mdash; not a quote, and not specific to any one employer. Role information draws on BLS, O*NET, and common industry reporting; each career profile links its primary source, and you should verify current expectations against real internship postings.</p>
+    </section>
   </section>
 
   <!-- ============ EXPLORE ============ -->
   <section id="viewExplore" class="view">
-    <div class="explorer-tabs" id="explorerTabs"></div>
-    <div id="roleDetail"></div>
+    <div id="roleGrid" class="role-grid"></div>
+    <div id="roleDetail" style="display:none;"></div>
   </section>
 
   <!-- ============ CAREER TEST ============ -->
@@ -374,12 +369,6 @@
       </div>
       <div class="module-content interview-content" id="interviewContent"></div>
     </div>
-  </section>
-
-  <section class="method">
-    <span class="eyebrow">Research &amp; transparency</span>
-    <h2>Built to help you decide &mdash; not decide for you.</h2>
-    <p>Career-test results are directional, not a psychological assessment. Salary figures are general, order-of-magnitude estimates &mdash; not a quote, and not specific to any one employer. Role information draws on BLS, O*NET, and common industry reporting; each career profile links its primary source, and you should verify current expectations against real internship postings.</p>
   </section>
 
   <footer>
@@ -704,7 +693,7 @@
     Object.entries(views).forEach(([key, el]) => el.classList.toggle("active", key === mode));
     modesNav.classList.toggle("visible", mode !== "home");
     Object.entries(tabs).forEach(([key, el]) => el.classList.toggle("active", key === mode));
-    if (mode === "explore") renderExplorerTab((opts && opts.roleId) || currentExploreId);
+    if (mode === "explore") { if (opts && opts.roleId) openDetail(opts.roleId); else closeDetail(); }
     if (mode === "discover") renderQuiz();
     if (mode === "prep") renderInterview((opts && opts.roleId) || currentPrepId);
     if (mode !== "home") window.scrollTo({ top: 0, behavior: "smooth" });
@@ -717,7 +706,7 @@
   goPrep.addEventListener("click", () => switchMode("prep"));
 
   // Home preview grid: title, one-sentence hook, entry-salary badge — click
-  // jumps straight into that role's tab in the Explorer.
+  // jumps straight into that role's detail in the Explorer.
   const careerPills = document.getElementById("careerPills");
   careerPills.innerHTML = ROLES.map((r) => `
     <button class="role-card" data-role="${r.id}">
@@ -731,23 +720,28 @@
   });
 
   // ---------------------------------------------------------------
-  // Explore module — a tab per career, always showing one role's detail.
+  // Explore module — plain grid of cards, click through to a detail panel.
   // ---------------------------------------------------------------
-  let currentExploreId = ROLES[0].id;
-  const explorerTabs = document.getElementById("explorerTabs");
+  const roleGrid = document.getElementById("roleGrid");
   const roleDetail = document.getElementById("roleDetail");
 
-  explorerTabs.innerHTML = ROLES.map((r) => `<button data-role="${r.id}">${r.title}</button>`).join("");
-  explorerTabs.querySelectorAll("button").forEach((btn) => {
-    btn.addEventListener("click", () => renderExplorerTab(btn.dataset.role));
-  });
+  function renderGrid() {
+    roleGrid.innerHTML = ROLES.map((r) => `
+      <button class="role-card" data-role="${r.id}">
+        <h3>${r.title}</h3>
+        <p class="hook">${r.hook}</p>
+        <span class="salary-badge mono">${money(r.salary.entry[0])}&ndash;${money(r.salary.entry[1])} entry</span>
+      </button>
+    `).join("");
+    roleGrid.querySelectorAll(".role-card").forEach((card) => {
+      card.addEventListener("click", () => openDetail(card.dataset.role));
+    });
+  }
 
-  function renderExplorerTab(id) {
-    currentExploreId = id;
+  function openDetail(id) {
     const r = roleById(id);
-    explorerTabs.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.role === id));
-
     roleDetail.innerHTML = `
+      <button class="back-link" id="backToGrid">&larr; All careers</button>
       <div class="detail">
         <h2>${r.title}</h2>
         <p class="hook">${r.hook}</p>
@@ -780,7 +774,16 @@
         </div>
       </div>
     `;
+    roleGrid.style.display = "none";
+    roleDetail.style.display = "block";
+    document.getElementById("backToGrid").addEventListener("click", closeDetail);
     document.getElementById("explorePracticeBtn").addEventListener("click", () => switchMode("prep", { roleId: id }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function closeDetail() {
+    roleDetail.style.display = "none";
+    roleGrid.style.display = "grid";
   }
 
   // ---------------------------------------------------------------
@@ -1002,7 +1005,7 @@
   // ---------------------------------------------------------------
   // Init
   // ---------------------------------------------------------------
-  renderExplorerTab(currentExploreId);
+  renderGrid();
 </script>
 </body>
 </html>
