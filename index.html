@@ -72,7 +72,7 @@
     position: sticky; top: 0; background: var(--bg); z-index: 20; padding: 0.9rem 1.5rem;
   }
   nav.modes.visible { display: flex; }
-  nav.modes .wordmark { background: none; border: none; cursor: pointer; font-family: "Sora", sans-serif; font-weight: 700; font-size: 1rem; color: var(--ink); padding: 0.4rem; }
+  nav.modes .wordmark { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1rem; color: var(--ink); padding: 0.4rem; }
   nav.modes .wordmark .is-pop { color: var(--accent); }
   nav.modes .modes-spacer { flex: 1; }
   nav.modes .nav-note { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; color: var(--ink-muted); text-transform: uppercase; margin-right: 1rem; }
@@ -121,24 +121,20 @@
     display: flex; justify-content: space-between; text-transform: uppercase;
   }
 
-  .career-strip {
-    margin-top: 1.75rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: 18px; background: var(--surface);
-    display: grid; grid-template-columns: 210px 1fr; gap: 1.5rem; align-items: center; text-align: left; box-shadow: var(--shadow);
+  .explore-preview { margin-top: 2.5rem; text-align: left; }
+  .explore-preview-head { margin-bottom: 1.1rem; }
+  .explore-preview-head h2 { font-size: 1.4rem; margin: 0.4rem 0 0; letter-spacing: -0.01em; }
+
+  /* ---- Explorer tabs ---- */
+  .explorer-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+  .explorer-tabs button {
+    border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--ink-muted);
+    padding: 0.55rem 1.05rem; font-family: "Sora", sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    transition: all 0.15s ease;
   }
-  @media (max-width: 780px) { .career-strip { grid-template-columns: 1fr; } }
-  .career-strip .overline-block strong { display: block; margin-top: 0.4rem; font-family: "Sora", sans-serif; font-size: 1.05rem; }
-  .career-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
-  @media (max-width: 560px) { .career-pills { grid-template-columns: 1fr 1fr; } }
-  .career-pills button {
-    border: 1px solid var(--border); border-radius: 11px; background: var(--bg); color: var(--ink);
-    padding: 0.55rem 0.7rem; display: flex; align-items: center; gap: 0.6rem; cursor: pointer; text-align: left;
-    font-family: "Sora", sans-serif; font-size: 0.8rem; font-weight: 600; min-height: 48px;
-  }
-  .career-pills button:hover { border-color: var(--accent); background: var(--accent-tint); }
-  .career-pills .mono-chip {
-    width: 30px; height: 30px; flex: none; border-radius: 8px; display: grid; place-items: center;
-    background: var(--accent-tint); color: var(--accent-strong); font-family: "IBM Plex Mono", monospace; font-size: 0.65rem; font-weight: 700;
-  }
+  .explorer-tabs button:hover { border-color: var(--accent); color: var(--ink); }
+  .explorer-tabs button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .explorer-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .method { max-width: 760px; margin: 3.5rem auto 1rem; padding: 0 1.5rem; text-align: center; }
   .method h2 { font-size: 1.6rem; margin: 0.5rem 0 0.75rem; }
@@ -191,6 +187,12 @@
   .panel h4.eyebrow { margin: 0 0 0.75rem; }
   .panel p { margin: 0.4rem 0; color: var(--ink-muted); font-size: 0.9rem; }
   .panel p:first-child { margin-top: 0; }
+
+  .salary-tiers { display: flex; flex-direction: column; gap: 0.6rem; }
+  .salary-tiers > div { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
+  .salary-tiers > div:last-child { border-bottom: none; padding-bottom: 0; }
+  .salary-tiers span { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 600; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .salary-tiers b { font-family: "Sora", sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--ink); }
 
   .career-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1.75rem 0; }
   @media (max-width: 620px) { .career-facts { grid-template-columns: 1fr; } }
@@ -307,9 +309,10 @@
 <div class="wrap">
 
   <nav class="modes" id="modesNav">
-    <button id="navHome" class="wordmark">this<span class="is-pop">IS</span>yourplace</button>
+    <span class="wordmark">this<span class="is-pop">IS</span>yourplace</span>
     <span class="modes-spacer"></span>
     <span class="nav-note">BYU Information Systems</span>
+    <button id="navHomeBtn">Home</button>
     <button id="tabExplore">Explorer</button>
     <button id="tabDiscover">Career Test</button>
     <button id="tabPrep">Interview Prep</button>
@@ -339,17 +342,17 @@
         </button>
       </div>
 
-      <div class="career-strip">
-        <div class="overline-block"><span class="eyebrow">Or explore first</span><strong>See what each IS career looks like.</strong></div>
-        <div class="career-pills" id="careerPills"></div>
+      <div class="explore-preview">
+        <div class="explore-preview-head"><span class="eyebrow">Or explore first</span><h2>See what each IS career looks like.</h2></div>
+        <div class="role-grid" id="careerPills"></div>
       </div>
     </div>
   </section>
 
   <!-- ============ EXPLORE ============ -->
   <section id="viewExplore" class="view">
-    <div id="roleGrid" class="role-grid"></div>
-    <div id="roleDetail" style="display:none;"></div>
+    <div class="explorer-tabs" id="explorerTabs"></div>
+    <div id="roleDetail"></div>
   </section>
 
   <!-- ============ CAREER TEST ============ -->
@@ -404,7 +407,8 @@
         "Comfortable with Git branching, commits, and pull requests",
         "Has at least one real project (a class project counts) they can explain in depth"
       ],
-      salary: [72000, 95000, "Growth toward senior engineer, tech lead, or engineering manager within 4–6 years is typical."],
+      salary: { entry: [72000, 95000], mid: [115000, 145000], high: [165000, 210000] },
+      growth: "Growth toward senior engineer, tech lead, or engineering manager within 4–6 years is typical.",
       strongCandidate: "Can explain the tradeoffs behind their own code, not just that it runs. Has a couple of projects they can talk through end to end — what broke, what they'd do differently — rather than a polished, rehearsed summary.",
       challenge: "A page in your app takes eight seconds to load. Name five possible causes and what you'd measure first to narrow it down.",
       source: { label: "BLS: Software Developers", url: "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm" },
@@ -439,7 +443,8 @@
         "Understands the gap between what someone asks for and what they need",
         "Organized — can track multiple open threads across a project without dropping one"
       ],
-      salary: [60000, 80000, "Common next steps: senior BA, product owner, or a PM track."],
+      salary: { entry: [60000, 80000], mid: [90000, 115000], high: [130000, 160000] },
+      growth: "Common next steps: senior BA, product owner, or a PM track.",
       strongCandidate: "Good at sitting between technical and non-technical people without losing either one. Asks sharp, specific clarifying questions instead of nodding along, and stays organized when a project has five moving pieces at once.",
       challenge: "Employees say expense approvals take too long. Write five questions you'd ask before proposing a solution.",
       source: { label: "BLS: Computer Systems Analysts", url: "https://www.bls.gov/ooh/computer-and-information-technology/computer-systems-analysts.htm" },
@@ -474,7 +479,8 @@
         "Can explain a finding in plain language without the jargon",
         "Checks their own numbers before presenting them"
       ],
-      salary: [62000, 82000, "Deeper stats/ML experience opens a track toward Data Scientist roles specifically."],
+      salary: { entry: [62000, 82000], mid: [95000, 120000], high: [140000, 175000] },
+      growth: "Deeper stats/ML experience opens a track toward Data Scientist roles specifically.",
       strongCandidate: "Skeptical of their own numbers before anyone else has to be — checks for data quality issues instead of presenting the first result. Tells a story with the data instead of just handing over a chart, and pushes back when a stakeholder's question doesn't match what the data can answer.",
       challenge: "A dashboard shows revenue rising while profit is falling. Walk through how you'd investigate why.",
       source: { label: "BLS: Data Scientists", url: "https://www.bls.gov/ooh/math/data-scientists.htm" },
@@ -509,7 +515,8 @@
         "Comfortable with some scripting for repetitive tasks",
         "Often has a Security+ cert or equivalent coursework/home-lab projects"
       ],
-      salary: [65000, 90000, "High demand keeps growth strong toward senior analyst, security engineering, or specialized tracks like pentesting."],
+      salary: { entry: [65000, 90000], mid: [105000, 130000], high: [150000, 185000] },
+      growth: "High demand keeps growth strong toward senior analyst, security engineering, or specialized tracks like pentesting.",
       strongCandidate: "Genuinely curious about how systems break, not just how to patch them after the fact. Stays calm and methodical when something's actively going wrong, and writes incident notes clearly enough that someone else could pick up where they left off.",
       challenge: "You receive an email that looks like a Microsoft password-reset notice. List everything you'd inspect before clicking anything.",
       source: { label: "BLS: Information Security Analysts", url: "https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm" },
@@ -544,7 +551,8 @@
         "Comfortable tracking several moving parts without losing track of any of them",
         "Willing to chase down answers instead of waiting for status to be handed to them"
       ],
-      salary: [55000, 75000, "Growth path: Project Coordinator → full PM → Senior PM → Program/Portfolio Manager."],
+      salary: { entry: [55000, 75000], mid: [85000, 110000], high: [125000, 155000] },
+      growth: "Growth path: Project Coordinator → full PM → Senior PM → Program/Portfolio Manager.",
       strongCandidate: "Surfaces risks before they become problems instead of after. Keeps people aligned without becoming a bottleneck everything has to route through, and can hold someone accountable for a missed deadline without it becoming personal.",
       challenge: "Two weeks before launch, testing reveals a serious defect. List the options you'd present to stakeholders.",
       source: { label: "BLS: Project Management Specialists", url: "https://www.bls.gov/ooh/business-and-financial/project-management-specialists.htm" },
@@ -579,7 +587,8 @@
         "Can write a spec or user story clear enough for engineering to build from",
         "Understands the gap between what users say they want and what they'll use"
       ],
-      salary: [65000, 88000, "UX track grows toward Senior/Lead Designer; PM track grows toward Senior PM, then Group PM or Director."],
+      salary: { entry: [65000, 88000], mid: [100000, 130000], high: [150000, 195000] },
+      growth: "UX track grows toward Senior/Lead Designer; PM track grows toward Senior PM, then Group PM or Director.",
       strongCandidate: "Can explain the reasoning behind a design or product decision, not just defend the polish. Willing to kill an idea they personally liked once research or data said otherwise, and balances what users want against real technical and business constraints instead of designing in a vacuum.",
       challenge: "How would you improve the class-registration experience at your own school? Name one specific pain point and one change you'd test first.",
       source: { label: "O*NET: Web & Digital Interface Designers", url: "https://www.onetonline.org/link/summary/15-1255.00" },
@@ -677,7 +686,7 @@
   // Mode switching
   // ---------------------------------------------------------------
   const modesNav = document.getElementById("modesNav");
-  const navHome = document.getElementById("navHome");
+  const navHomeBtn = document.getElementById("navHomeBtn");
   const tabExplore = document.getElementById("tabExplore");
   const tabDiscover = document.getElementById("tabDiscover");
   const tabPrep = document.getElementById("tabPrep");
@@ -695,51 +704,50 @@
     Object.entries(views).forEach(([key, el]) => el.classList.toggle("active", key === mode));
     modesNav.classList.toggle("visible", mode !== "home");
     Object.entries(tabs).forEach(([key, el]) => el.classList.toggle("active", key === mode));
-    if (mode === "explore") { if (opts && opts.roleId) openDetail(opts.roleId); else closeDetail(); }
+    if (mode === "explore") renderExplorerTab((opts && opts.roleId) || currentExploreId);
     if (mode === "discover") renderQuiz();
     if (mode === "prep") renderInterview((opts && opts.roleId) || currentPrepId);
     if (mode !== "home") window.scrollTo({ top: 0, behavior: "smooth" });
   }
-  navHome.addEventListener("click", () => switchMode("home"));
+  navHomeBtn.addEventListener("click", () => switchMode("home"));
   tabExplore.addEventListener("click", () => switchMode("explore"));
   tabDiscover.addEventListener("click", () => switchMode("discover"));
   tabPrep.addEventListener("click", () => switchMode("prep"));
   goDiscover.addEventListener("click", () => switchMode("discover"));
   goPrep.addEventListener("click", () => switchMode("prep"));
 
-  // Home career-strip quick links jump straight into a role's explorer profile.
+  // Home preview grid: title, one-sentence hook, entry-salary badge — click
+  // jumps straight into that role's tab in the Explorer.
   const careerPills = document.getElementById("careerPills");
   careerPills.innerHTML = ROLES.map((r) => `
-    <button data-role="${r.id}"><span class="mono-chip">${r.short}</span>${r.title}</button>
+    <button class="role-card" data-role="${r.id}">
+      <h3>${r.title}</h3>
+      <p class="hook">${r.hook}</p>
+      <span class="salary-badge mono">${money(r.salary.entry[0])}&ndash;${money(r.salary.entry[1])} entry</span>
+    </button>
   `).join("");
   careerPills.querySelectorAll("button").forEach((btn) => {
     btn.addEventListener("click", () => switchMode("explore", { roleId: btn.dataset.role }));
   });
 
   // ---------------------------------------------------------------
-  // Explore module — plain grid of cards, click through to a detail panel.
+  // Explore module — a tab per career, always showing one role's detail.
   // ---------------------------------------------------------------
-  const roleGrid = document.getElementById("roleGrid");
+  let currentExploreId = ROLES[0].id;
+  const explorerTabs = document.getElementById("explorerTabs");
   const roleDetail = document.getElementById("roleDetail");
 
-  function renderGrid() {
-    roleGrid.innerHTML = ROLES.map((r) => `
-      <button class="role-card" data-role="${r.id}">
-        <h3>${r.title}</h3>
-        <p class="hook">${r.hook}</p>
-        <span class="salary-badge mono">${money(r.salary[0])}&ndash;${money(r.salary[1])} entry</span>
-        <div class="tag-row">${r.skills.slice(0, 3).map((s) => `<span class="tag">${s}</span>`).join("")}</div>
-      </button>
-    `).join("");
-    roleGrid.querySelectorAll(".role-card").forEach((card) => {
-      card.addEventListener("click", () => openDetail(card.dataset.role));
-    });
-  }
+  explorerTabs.innerHTML = ROLES.map((r) => `<button data-role="${r.id}">${r.title}</button>`).join("");
+  explorerTabs.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => renderExplorerTab(btn.dataset.role));
+  });
 
-  function openDetail(id) {
+  function renderExplorerTab(id) {
+    currentExploreId = id;
     const r = roleById(id);
+    explorerTabs.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.role === id));
+
     roleDetail.innerHTML = `
-      <button class="back-link" id="backToGrid">&larr; All careers</button>
       <div class="detail">
         <h2>${r.title}</h2>
         <p class="hook">${r.hook}</p>
@@ -751,9 +759,16 @@
           </div>
           <div>
             <div class="panel"><h4 class="eyebrow">Skills &amp; tools</h4><div class="tag-row">${r.skills.map((s) => `<span class="tag">${s}</span>`).join("")}</div></div>
+            <div class="panel">
+              <h4 class="eyebrow">Salary by career stage</h4>
+              <div class="salary-tiers">
+                <div><span>Entry</span><b>${money(r.salary.entry[0])}&ndash;${money(r.salary.entry[1])}</b></div>
+                <div><span>Mid-career</span><b>${money(r.salary.mid[0])}&ndash;${money(r.salary.mid[1])}</b></div>
+                <div><span>High-end</span><b>${money(r.salary.high[0])}&ndash;${money(r.salary.high[1])}</b></div>
+              </div>
+            </div>
             <div class="career-facts">
-              <div><small class="mono">SALARY</small><p>${money(r.salary[0])}&ndash;${money(r.salary[1])} entry &mdash; general estimate.</p></div>
-              <div><small class="mono">GROWTH</small><p>${r.salary[2]}</p></div>
+              <div class="wide"><small class="mono">GROWTH</small><p>${r.growth}</p></div>
               <div class="wide"><small class="mono">SOURCE</small><p><a href="${r.source.url}" target="_blank" rel="noreferrer">${r.source.label} &#8599;</a></p></div>
             </div>
             <div class="challenge">
@@ -765,16 +780,7 @@
         </div>
       </div>
     `;
-    roleGrid.style.display = "none";
-    roleDetail.style.display = "block";
-    document.getElementById("backToGrid").addEventListener("click", closeDetail);
     document.getElementById("explorePracticeBtn").addEventListener("click", () => switchMode("prep", { roleId: id }));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function closeDetail() {
-    roleDetail.style.display = "none";
-    roleGrid.style.display = "grid";
   }
 
   // ---------------------------------------------------------------
@@ -996,7 +1002,7 @@
   // ---------------------------------------------------------------
   // Init
   // ---------------------------------------------------------------
-  renderGrid();
+  renderExplorerTab(currentExploreId);
 </script>
 </body>
 </html>
