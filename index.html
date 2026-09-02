@@ -75,6 +75,8 @@
   nav.modes .wordmark { background: none; border: none; cursor: pointer; font-family: "Sora", sans-serif; font-weight: 700; font-size: 1rem; color: var(--ink); padding: 0.4rem; }
   nav.modes .wordmark .is-pop { color: var(--accent); }
   nav.modes .modes-spacer { flex: 1; }
+  nav.modes .nav-note { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; color: var(--ink-muted); text-transform: uppercase; margin-right: 1rem; }
+  @media (max-width: 640px) { nav.modes .nav-note { display: none; } }
   nav.modes button:not(.wordmark) {
     background: none; border: none; cursor: pointer; font-family: "Sora", sans-serif; font-weight: 600;
     font-size: 0.92rem; color: var(--ink-muted); padding: 0.6rem 0.9rem; margin-left: 0.25rem;
@@ -307,6 +309,7 @@
   <nav class="modes" id="modesNav">
     <button id="navHome" class="wordmark">this<span class="is-pop">IS</span>yourplace</button>
     <span class="modes-spacer"></span>
+    <span class="nav-note">BYU Information Systems</span>
     <button id="tabExplore">Explorer</button>
     <button id="tabDiscover">Career Test</button>
     <button id="tabPrep">Interview Prep</button>
@@ -377,7 +380,7 @@
   </section>
 
   <footer>
-    thisISyourplace helps BYU Information Systems students explore real career paths and prepare for the interviews that lead to them. Answers you type in Interview Prep are saved locally in your browser only.
+    thisISyourplace is built for the BYU Information Systems program, helping students explore real career paths and prepare for the interviews that lead to them. Career and interview content was drafted with AI assistance, then fact-checked against primary sources &mdash; the U.S. Bureau of Labor Statistics and O*NET &mdash; with each career profile linking its specific source. Answers you type in Interview Prep are saved locally in your browser only.
   </footer>
 
 </div>
