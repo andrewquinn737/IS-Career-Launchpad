@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IS Career Launchpad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" />
+<style>
+  :root {
+    --bg: #f2f5f6;
+    --surface: #ffffff;
+    --surface-2: #e9eef0;
+    --border: #d7dfe2;
+    --ink: #16212b;
+    --ink-muted: #55636e;
+    --accent: #1f7a6c;
+    --accent-strong: #14584e;
+    --accent-tint: #e2f1ee;
+    --amber: #c97a1f;
+    --amber-tint: #f7ead4;
+    --shadow: 0 1px 2px rgba(22,33,43,0.06), 0 8px 24px rgba(22,33,43,0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1417;
+      --surface: #141d21;
+      --surface-2: #1a2529;
+      --border: #263135;
+      --ink: #eef2f2;
+      --ink-muted: #a7b3b6;
+      --accent: #3aab95;
+      --accent-strong: #56c3ac;
+      --accent-tint: #17302c;
+      --amber: #e2a04c;
+      --amber-tint: #2e2517;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1417;
+    --surface: #141d21;
+    --surface-2: #1a2529;
+    --border: #263135;
+    --ink: #eef2f2;
+    --ink-muted: #a7b3b6;
+    --accent: #3aab95;
+    --accent-strong: #56c3ac;
+    --accent-tint: #17302c;
+    --amber: #e2a04c;
+    --amber-tint: #2e2517;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Source Serif 4", Georgia, serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .display { font-family: "Sora", system-ui, sans-serif; text-wrap: balance; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+  }
+  a { color: var(--accent-strong); }
+  button { font: inherit; }
+  ::selection { background: var(--accent-tint); }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 2.75rem 1.5rem 5rem; }
+
+  header.top { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 2.25rem; }
+  header.top h1 { font-size: clamp(2rem, 4.5vw, 2.75rem); font-weight: 700; margin: 0.35rem 0 0; letter-spacing: -0.01em; }
+  header.top .sub { max-width: 62ch; color: var(--ink-muted); margin: 0; font-size: 1.05rem; }
+  header.top .meta {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.4rem;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--ink-muted);
+  }
+  header.top .meta strong { color: var(--ink); font-weight: 600; }
+
+  nav.modes {
+    display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem; position: sticky; top: 0; background: var(--bg);
+    padding-top: 0.25rem; z-index: 5;
+  }
+  nav.modes button {
+    background: none; border: none; cursor: pointer;
+    font-family: "Sora", sans-serif; font-weight: 600; font-size: 0.95rem;
+    color: var(--ink-muted); padding: 0.75rem 0.25rem; margin-right: 1.75rem;
+    border-bottom: 2px solid transparent; position: relative; top: 1px;
+    transition: color 0.15s ease;
+  }
+  nav.modes button:hover { color: var(--ink); }
+  nav.modes button.active { color: var(--ink); border-bottom-color: var(--amber); }
+  nav.modes button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  section.view { display: none; }
+  section.view.active { display: block; animation: fade 0.25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { section.view.active { animation: none; } }
+
+  /* ---- Career grid ---- */
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  .role-card {
+    text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.15rem 1.25rem 1.25rem; cursor: pointer; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 0.65rem; transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .role-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .role-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .role-card h3 { font-size: 1.08rem; margin: 0; }
+  .role-card .hook { color: var(--ink-muted); font-size: 0.88rem; margin: 0; flex: 1; }
+  .role-card .salary-badge {
+    align-self: flex-start; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 600;
+    background: var(--accent-tint); color: var(--accent-strong); padding: 0.25rem 0.55rem; border-radius: 999px;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 500;
+    background: var(--surface-2); color: var(--ink-muted); border: 1px solid var(--border);
+    padding: 0.2rem 0.5rem; border-radius: 5px; white-space: nowrap;
+  }
+
+  /* ---- Detail panel ---- */
+  .back-link {
+    background: none; border: none; cursor: pointer; font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem; font-weight: 600; color: var(--ink-muted); padding: 0; margin-bottom: 1.25rem;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .back-link:hover { color: var(--accent-strong); }
+  .detail h2 { font-size: 1.7rem; margin: 0 0 0.25rem; }
+  .detail .hook { color: var(--ink-muted); font-size: 1.05rem; margin: 0 0 1.75rem; max-width: 60ch; }
+  .detail-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem; align-items: start; }
+  @media (max-width: 720px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.35rem 1.5rem; margin-bottom: 1.25rem; box-shadow: var(--shadow);
+  }
+  .panel h4.eyebrow { margin: 0 0 0.75rem; }
+  .panel p { margin: 0; }
+  .panel ul { margin: 0; padding-left: 1.15rem; }
+  .panel li + li { margin-top: 0.4rem; }
+
+  .salary-scale { margin-top: 0.9rem; }
+  .salary-track { height: 8px; border-radius: 999px; background: var(--surface-2); position: relative; overflow: hidden; }
+  .salary-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--amber)); border-radius: 999px; }
+  .salary-labels { display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; margin-top: 0.4rem; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+  .salary-labels strong { color: var(--ink); }
+  .data-note { font-size: 0.76rem; color: var(--ink-muted); margin-top: 0.9rem; font-family: "IBM Plex Mono", monospace; line-height: 1.5; }
+
+  /* ---- Interview prep ---- */
+  .role-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+  .role-chip {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px; cursor: pointer;
+    padding: 0.5rem 1rem; font-family: "Sora", sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--ink-muted);
+    transition: all 0.15s ease;
+  }
+  .role-chip:hover { border-color: var(--accent); color: var(--ink); }
+  .role-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .prep-progress { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.75rem; }
+  .prep-progress .bar { flex: 1; height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; max-width: 260px; }
+  .prep-progress .fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.2s ease; }
+  .prep-progress .count { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--ink-muted); white-space: nowrap; }
+
+  .qgroup-title { font-size: 1.05rem; margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .qgroup-title .eyebrow { margin: 0; }
+
+  .qcard {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.25rem 1.4rem 1.4rem; margin-bottom: 1rem; box-shadow: var(--shadow);
+  }
+  .qcard .qtext { font-size: 1.02rem; margin: 0 0 0.9rem; font-style: italic; }
+  .qcard textarea {
+    width: 100%; min-height: 84px; resize: vertical; font-family: "Source Serif 4", Georgia, serif; font-size: 0.95rem;
+    background: var(--bg); color: var(--ink); border: 1px solid var(--border); border-radius: 7px; padding: 0.65rem 0.8rem;
+  }
+  .qcard textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qcard .qfooter { display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; gap: 1rem; flex-wrap: wrap; }
+  .reveal-btn {
+    background: none; border: 1px solid var(--accent); color: var(--accent-strong); border-radius: 999px; cursor: pointer;
+    padding: 0.4rem 0.9rem; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; font-weight: 600;
+  }
+  .reveal-btn:hover { background: var(--accent-tint); }
+  .saved-hint { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--ink-muted); opacity: 0; transition: opacity 0.3s ease; }
+  .saved-hint.show { opacity: 1; }
+  .strong-answer {
+    display: none; margin-top: 0.9rem; padding: 0.9rem 1.05rem; background: var(--amber-tint);
+    border-radius: 8px; border-left: 3px solid var(--amber); font-size: 0.92rem;
+  }
+  .strong-answer.open { display: block; }
+  .strong-answer .label { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.4rem; }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--ink-muted); font-size: 0.8rem; font-family: "IBM Plex Mono", monospace; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="eyebrow">BYU Information Systems · Junior Core Case Competition</span>
+    <h1>IS Career Launchpad</h1>
+    <p class="sub">Explore where an IS degree actually leads, then practice the interview before it counts. Built for incoming IS students figuring out what to aim for &mdash; and how to get there.</p>
+    <div class="meta">
+      <span><strong>5</strong> career paths</span>
+      <span><strong>30</strong> interview questions</span>
+      <span>Prototype &mdash; v1</span>
+    </div>
+  </header>
+
+  <nav class="modes">
+    <button id="tabDiscover" class="active">Explore Careers</button>
+    <button id="tabPrep">Interview Prep</button>
+  </nav>
+
+  <!-- ============ DISCOVER ============ -->
+  <section id="viewDiscover" class="view active">
+    <div id="roleGrid" class="role-grid"></div>
+    <div id="roleDetail" style="display:none;"></div>
+  </section>
+
+  <!-- ============ INTERVIEW PREP ============ -->
+  <section id="viewPrep" class="view">
+    <div id="prepChips" class="role-chips"></div>
+    <div id="prepProgress" class="prep-progress"></div>
+    <div id="prepQuestions"></div>
+  </section>
+
+  <footer>
+    Career outlook and salary figures are general, order-of-magnitude estimates drawn from common industry reporting (roles like these typically publish ranges via sources such as BLS OES data, Levels.fyi, and Glassdoor aggregates) &mdash; not a single live data feed. Treat them as a starting point for research, not a quote. &middot; Answers you type in Interview Prep are saved locally in your browser only.
+  </footer>
+
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // Data: five IS career paths. Each `salary` is [entryLow, entryHigh, ceilingNote].
+  // ---------------------------------------------------------------
+  const ROLES = [
+    {
+      id: "swe",
+      title: "Software / Application Developer",
+      hook: "Build the products people actually use, from mobile apps to backend systems.",
+      dayToDay: "Most days split between writing and testing new code, fixing bugs surfaced by users or QA, and reviewing teammates' pull requests. You'll sit in daily stand-ups, help scope upcoming features with your team, and periodically get pulled into debugging something in production that's more interesting than it should be at 4pm on a Friday.",
+      skills: ["One language deeply (Java/Python/JS/C#)", "Git & pull requests", "Data structures & algorithms", "SQL basics", "Debugging tools", "Cloud basics (AWS/Azure)"],
+      entryExpectations: [
+        "Can write clean, working code for a well-scoped problem without hand-holding",
+        "Understands core data structures (arrays, hash maps, trees) and when to use each",
+        "Can read and debug someone else's code, not just their own",
+        "Comfortable with Git branching, commits, and pull requests",
+        "Has at least one real project (a class project counts) they can explain in depth"
+      ],
+      salary: [72000, 95000, "Growth toward senior engineer, tech lead, or engineering manager within 4–6 years is typical."],
+      strongCandidate: "Can explain the tradeoffs behind their own code, not just that it runs. Has a couple of projects they can talk through end to end — what broke, what they'd do differently — rather than a polished, rehearsed summary.",
+      behavioral: [
+        {
+          q: "Tell me about a bug you genuinely couldn't figure out for a while. What did you finally do?",
+          a: "Name the specific bug and why it was hard (intermittent, misleading error, unfamiliar code). Walk through your actual debugging process in order — what you ruled out, what tool or technique cracked it (print statements, a debugger, rubber-ducking with someone). End with what you'd do differently or faster next time. Interviewers are listening for process, not a clean ending."
+        },
+        {
+          q: "Describe a time you disagreed with a teammate about how to build something. What happened?",
+          a: "Focus on the reasoning on both sides, not who \"won.\" Show you can explain the other person's logic fairly before explaining your own. Land on how it actually got resolved — a compromise, a prototype that settled it, deferring to whoever owned that part of the system — and what you took from it."
+        },
+        {
+          q: "Tell me about a project you're proud of. Walk me through it.",
+          a: "Pick something you can go deep on, not your most impressive-sounding project. Cover: the problem it solved, one real technical decision you made and why, and one thing you'd change now that you know more. Depth beats scale — a small project you can discuss for five minutes beats a big one you can only describe in one."
+        }
+      ],
+      technical: [
+        {
+          q: "What's the difference between an array and a linked list, and when would you use each?",
+          a: "Arrays: contiguous memory, O(1) random access, O(n) insert/delete in the middle. Linked lists: O(1) insert/delete once you're at the node, O(n) access since you have to walk the list. Use arrays when you need fast lookups and know the size roughly upfront; use linked lists when you're doing lots of insertion/deletion and don't need random access. Mentioning cache locality (arrays are faster in practice due to memory layout) is a strong add-on."
+        },
+        {
+          q: "What is Big-O notation, and why does it matter?",
+          a: "Big-O describes how an algorithm's runtime or memory use grows as input size grows — worst-case, ignoring constants. It matters because it's how you compare two approaches before you've written or run either one, and because code that works fine on 100 rows can fall over on 10 million. A good answer gives a concrete example: a nested loop over the same list is O(n²); a hash-map lookup is O(1)."
+        },
+        {
+          q: "Walk me through how you'd reverse a string, and why you'd do it that way.",
+          a: "Talk through the approach out loud before code: two-pointer swap from both ends toward the middle is O(n) time, O(1) extra space if the language allows in-place mutation. If the language uses immutable strings (Python, Java), acknowledge you're building a new string and that's O(n) space. Interviewers care more about you narrating your reasoning than the syntax being perfect."
+        }
+      ]
+    },
+    {
+      id: "ba",
+      title: "Business / Systems Analyst",
+      hook: "Translate what the business actually needs into what the technical team builds.",
+      dayToDay: "Interviewing stakeholders to figure out what they really need (which is often not what they first ask for), documenting current-state and future-state processes, writing user stories and requirements, and sitting in the middle of meetings between business teams and developers making sure both sides understood each other correctly.",
+      skills: ["Requirements writing", "Process mapping (flowcharts/BPMN)", "Excel", "Jira / Confluence", "Basic SQL", "Stakeholder interviewing"],
+      entryExpectations: [
+        "Can write a requirements doc or user story that a developer could actually build from",
+        "Asks clarifying questions rather than assuming what a stakeholder means",
+        "Comfortable in Excel; basic SQL is a real plus",
+        "Understands the gap between what someone asks for and what they actually need",
+        "Organized — can track multiple open threads across a project without dropping one"
+      ],
+      salary: [60000, 80000, "Common next steps: senior BA, product owner, or a PM track."],
+      strongCandidate: "Good at sitting between technical and non-technical people without losing either one. Asks sharp, specific clarifying questions instead of nodding along, and stays organized when a project has five moving pieces at once.",
+      behavioral: [
+        {
+          q: "Tell me about a time you had to gather requirements from someone who wasn't sure what they wanted.",
+          a: "Describe the specific technique you used to get past vagueness — asking about the underlying problem instead of the requested solution, walking through their current process step by step, or showing a mockup to react to. End with the concrete requirement that came out of it, and ideally that it turned out to be different from what they first said."
+        },
+        {
+          q: "Describe a situation where business and technical stakeholders disagreed on scope. How did you handle it?",
+          a: "Show you understood both positions well enough to explain them fairly. Focus on how you found the actual tradeoff (cost, timeline, technical risk) and helped both sides make an informed decision — your job is facilitating a good decision, not picking a side."
+        },
+        {
+          q: "Tell me about a time you had to say no to a stakeholder's request. How did you handle it?",
+          a: "Show you didn't just refuse — you explained the tradeoff (why it would break the timeline, conflict with another requirement, or not solve the real problem) and offered an alternative. Analysts who can push back respectfully are rare and valued."
+        }
+      ],
+      technical: [
+        {
+          q: "What's the difference between a functional and a non-functional requirement?",
+          a: "Functional: what the system does — \"users can reset their password by email.\" Non-functional: how well it does it — performance, security, availability (\"password reset emails must send within 30 seconds\"). Give one example of each to show you're not just reciting the definition."
+        },
+        {
+          q: "Walk me through how you'd document a business process you don't fully understand yet.",
+          a: "Talk through your actual method: interview the people who do it today, map it step by step (a simple flowchart is fine), note every decision point and exception, then walk the map back past the people you interviewed to confirm you got it right before treating it as final."
+        },
+        {
+          q: "How would you prioritize a backlog of ten feature requests with limited dev time?",
+          a: "Reference a real framework — impact vs. effort, or MoSCoW (must/should/could/won't) — and explain that priority isn't just about stakeholder loudness. Mention that you'd want a rough size estimate from engineering before ranking, since something you assume is small might actually be a two-week job."
+        }
+      ]
+    },
+    {
+      id: "data",
+      title: "Data Analyst / Data Scientist",
+      hook: "Turn raw data into decisions leadership can actually act on.",
+      dayToDay: "Pulling and cleaning data with SQL or Python, building and maintaining dashboards, running analyses to answer a specific business question someone actually asked, and presenting findings in a way a non-technical VP can act on in under five minutes.",
+      skills: ["SQL (essential)", "Python or R", "Tableau / Power BI", "Excel", "Basic statistics", "Data cleaning"],
+      entryExpectations: [
+        "Comfortable writing SQL joins, aggregations, and window functions",
+        "Can build a dashboard that's actually readable, not just technically correct",
+        "Understands basic stats — mean vs. median, correlation vs. causation",
+        "Can explain a finding in plain language without the jargon",
+        "Checks their own numbers before presenting them"
+      ],
+      salary: [62000, 82000, "Deeper stats/ML experience opens a track toward Data Scientist roles specifically."],
+      strongCandidate: "Skeptical of their own numbers before anyone else has to be — checks for data quality issues instead of presenting the first result. Tells a story with the data instead of just handing over a chart, and pushes back when a stakeholder's question doesn't match what the data can actually answer.",
+      behavioral: [
+        {
+          q: "Tell me about a time your analysis told a different story than what stakeholders expected.",
+          a: "Describe the moment you noticed the mismatch, how you double-checked your own work before raising it (this matters — it shows rigor), and how you actually delivered the unwelcome finding. Bonus points if you describe adjusting how you presented it so it landed as useful instead of as an argument."
+        },
+        {
+          q: "Describe a time you found an error in your own data or analysis before anyone else caught it.",
+          a: "Specific catches land better than general claims of carefulness — a join that was silently duplicating rows, a filter excluding data it shouldn't have. Explain what tipped you off (a number that felt too clean, a total that didn't reconcile) and what you changed in your process afterward to catch it earlier next time."
+        },
+        {
+          q: "Tell me about a time you had to explain a technical finding to someone non-technical.",
+          a: "Show the translation, not just the fact that you did it — what jargon you dropped, what analogy or visual you used instead, and how you checked they actually understood (asking them to restate it back, watching for the follow-up question that told you it landed)."
+        }
+      ],
+      technical: [
+        {
+          q: "Write a SQL query to find the second-highest salary in an employee table.",
+          a: "A clean answer: SELECT MAX(salary) FROM employees WHERE salary < (SELECT MAX(salary) FROM employees). Mention the alternative with DENSE_RANK() or OFFSET/LIMIT and when you'd prefer it (ties, needing the Nth value generally, not just the 2nd). Naming the edge case — duplicate top salaries — is what separates a strong answer from a memorized one."
+        },
+        {
+          q: "How would you handle missing data in a dataset?",
+          a: "There's no single right answer — that's the point. Walk through the decision: first figure out why it's missing (random vs. systematic), then choose based on that — drop rows if it's a small, random amount; impute (mean/median, or a model-based estimate) if you need to keep the rows; flag it explicitly if the missingness itself might be meaningful (e.g. people who skip an income question tend to differ from those who don't)."
+        },
+        {
+          q: "What's the difference between correlation and causation? Give a concrete example.",
+          a: "Correlation means two things move together; causation means one actually causes the other. Classic example: ice cream sales and drowning deaths both rise in summer — correlated, not causal; heat is the actual driver of both. A stronger answer adds how you'd test for causation in practice — a controlled experiment (A/B test) rather than just observational data."
+        }
+      ]
+    },
+    {
+      id: "sec",
+      title: "Cybersecurity Analyst",
+      hook: "Defend the systems everyone else takes for granted.",
+      dayToDay: "Monitoring security alerts and logs for anything unusual, triaging and investigating flagged incidents, running vulnerability scans, helping enforce security policy and training, and writing up clear documentation of what happened whenever something did.",
+      skills: ["Networking (TCP/IP, firewalls)", "Basic scripting (Python/PowerShell)", "SIEM tools (e.g. Splunk)", "Common attack types", "Security+ or equivalent"],
+      entryExpectations: [
+        "Solid grasp of core networking and security fundamentals",
+        "Can explain common attack vectors (phishing, malware, social engineering) and basic defenses",
+        "Detail-oriented and methodical, especially under pressure",
+        "Comfortable with some scripting for repetitive tasks",
+        "Often has a Security+ cert or equivalent coursework/home-lab projects"
+      ],
+      salary: [65000, 90000, "High demand keeps growth strong toward senior analyst, security engineering, or specialized tracks like pentesting."],
+      strongCandidate: "Genuinely curious about how systems break, not just how to patch them after the fact. Stays calm and methodical when something's actively going wrong, and writes incident notes clearly enough that someone else could pick up where they left off.",
+      behavioral: [
+        {
+          q: "Tell me about a time you noticed something suspicious. What did you do?",
+          a: "Even a small, real example works well here — a phishing email, unusual account activity, a friend's compromised account. Walk through what specifically tipped you off, what you did about it in order, and who you told or how you resolved it. Interviewers want to see instinct plus a sane process, not a dramatic story."
+        },
+        {
+          q: "Describe a time you had to stay calm while something was going wrong.",
+          a: "Doesn't need to be security-specific — any high-pressure situation works if you show the pattern: you kept working the problem methodically instead of panicking, communicated status to whoever needed it, and didn't skip steps just to move faster. That composure under pressure is exactly what they're screening for."
+        },
+        {
+          q: "Tell me about a time you had to explain a security risk to someone who didn't think it mattered.",
+          a: "Show you translated risk into terms that landed for them — cost, downtime, reputational damage — rather than technical severity scores they'd shrug off. Bonus if you describe following up to confirm the fix actually happened, not just that you flagged it once."
+        }
+      ],
+      technical: [
+        {
+          q: "What's the difference between symmetric and asymmetric encryption?",
+          a: "Symmetric: one shared key encrypts and decrypts — fast, but you need a secure way to share that key. Asymmetric: a public/private key pair — encrypt with the public key, only the private key decrypts. Slower, but solves the key-distribution problem. Mentioning that real systems (like TLS) use both — asymmetric to exchange a symmetric key, then symmetric for the actual data — is a strong signal of real understanding."
+        },
+        {
+          q: "Walk me through how you'd respond to a reported phishing email.",
+          a: "A clear order matters: don't click anything in it; check headers/sender domain for spoofing; check if others in the org received it; if it's real, block the sender and notify affected users; document what happened. Naming a real framework loosely (identify → contain → eradicate → recover → document) shows you understand incident response isn't improvised."
+        },
+        {
+          q: "What's the difference between a vulnerability, a threat, and a risk?",
+          a: "Vulnerability: a weakness (unpatched software). Threat: something that could exploit it (an attacker, malware). Risk: the likelihood and impact if the threat actually exploits that vulnerability. A strong answer gives a concrete example tying all three together, e.g. an unpatched server (vulnerability) + a known exploit in the wild (threat) = high risk if that server holds sensitive data."
+        }
+      ]
+    },
+    {
+      id: "pm",
+      title: "IT Project Manager",
+      hook: "Keep complex technical projects on time, on budget, and actually shipping.",
+      dayToDay: "Running status meetings, tracking timeline/budget/risk, coordinating between engineering, design, and business stakeholders, keeping the project plan or sprint board current, and unblocking the team the moment something stalls instead of waiting for it to become a crisis.",
+      skills: ["Jira / Asana / MS Project", "Agile & Scrum fundamentals", "Budgeting & scheduling", "Risk tracking", "Written & verbal communication"],
+      entryExpectations: [
+        "Most true PM roles want 1–3 years of experience — the realistic entry point is a Project Coordinator or Associate PM role",
+        "Being organized and a clear communicator matters more than mastering a specific tool",
+        "A CAPM or Scrum certification is a reasonable early signal of readiness",
+        "Comfortable tracking several moving parts without losing track of any of them",
+        "Willing to chase down answers instead of waiting for status to be handed to them"
+      ],
+      salary: [55000, 75000, "Growth path: Project Coordinator → full PM → Senior PM → Program/Portfolio Manager."],
+      strongCandidate: "Surfaces risks before they become problems instead of after. Keeps people aligned without becoming a bottleneck everything has to route through, and can hold someone accountable for a missed deadline without it becoming personal.",
+      behavioral: [
+        {
+          q: "Tell me about a time a project timeline slipped. How did you handle it?",
+          a: "Name the actual cause (scope creep, an underestimated task, a dependency that fell through) rather than a vague \"things came up.\" Walk through what you did once you saw it slipping — re-scoped, renegotiated the deadline, added resources — and how you communicated the change to stakeholders before they had to ask."
+        },
+        {
+          q: "Describe a time you had to hold a teammate accountable for missed work.",
+          a: "Show you addressed it directly but respectfully — asked what was blocking them before assuming it was a motivation problem, and focused the conversation on the project's needs rather than criticizing them personally. End with the outcome, not just the conversation."
+        },
+        {
+          q: "Tell me about a time stakeholders disagreed on priorities. How did you resolve it?",
+          a: "Focus on how you got everyone looking at the same tradeoff — cost, timeline, or risk — instead of just their personal preference, and who ultimately had (or you helped establish) the authority to make the final call. Facilitation, not persuasion, is the actual skill being tested here."
+        }
+      ],
+      technical: [
+        {
+          q: "What's the difference between Agile and Waterfall, and when would you use each?",
+          a: "Waterfall: sequential phases, plan up front, works well when requirements are stable and well understood (e.g. regulated industries, hardware). Agile: iterative sprints, adapts as you learn, works well when requirements will evolve (most software). A strong answer notes many real projects blend both — Agile execution inside a Waterfall-style overall budget/timeline commitment."
+        },
+        {
+          q: "How would you estimate the timeline for a project with a lot of unknowns?",
+          a: "Reference a real technique: break the work into smaller pieces you can estimate with more confidence, use ranges instead of single numbers early on, and build in explicit contingency for the unknowns rather than pretending they don't exist. Mention that the estimate should get more precise as the unknowns get resolved, not stay fixed from day one."
+        },
+        {
+          q: "What's a risk register, and how would you use one on a real project?",
+          a: "A living list of things that could go wrong, each with a likelihood, an impact, and a mitigation or contingency plan — reviewed regularly, not written once and filed away. A strong answer gives a concrete example risk (a key vendor dependency, a team member's planned leave) and what mitigation would actually look like for it."
+        }
+      ]
+    }
+  ];
+
+  // ---------------------------------------------------------------
+  // Local persistence for interview-prep answers
+  // ---------------------------------------------------------------
+  const STORE_KEY = "islaunchpad:answers";
+  function loadAnswers() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch { return {}; }
+  }
+  function saveAnswer(key, text) {
+    const all = loadAnswers();
+    all[key] = text;
+    localStorage.setItem(STORE_KEY, JSON.stringify(all));
+  }
+
+  // ---------------------------------------------------------------
+  // Mode tabs
+  // ---------------------------------------------------------------
+  const tabDiscover = document.getElementById("tabDiscover");
+  const tabPrep = document.getElementById("tabPrep");
+  const viewDiscover = document.getElementById("viewDiscover");
+  const viewPrep = document.getElementById("viewPrep");
+
+  tabDiscover.addEventListener("click", () => switchMode("discover"));
+  tabPrep.addEventListener("click", () => switchMode("prep"));
+
+  function switchMode(mode) {
+    const toDiscover = mode === "discover";
+    tabDiscover.classList.toggle("active", toDiscover);
+    tabPrep.classList.toggle("active", !toDiscover);
+    viewDiscover.classList.toggle("active", toDiscover);
+    viewPrep.classList.toggle("active", !toDiscover);
+  }
+
+  // ---------------------------------------------------------------
+  // Discover: grid + detail
+  // ---------------------------------------------------------------
+  const roleGrid = document.getElementById("roleGrid");
+  const roleDetail = document.getElementById("roleDetail");
+
+  function money(n) { return "$" + Math.round(n / 1000) + "k"; }
+
+  function renderGrid() {
+    roleGrid.innerHTML = ROLES.map((r) => `
+      <button class="role-card" data-role="${r.id}">
+        <h3>${r.title}</h3>
+        <p class="hook">${r.hook}</p>
+        <span class="salary-badge mono">${money(r.salary[0])}–${money(r.salary[1])} entry</span>
+        <div class="tag-row">${r.skills.slice(0, 3).map((s) => `<span class="tag">${s}</span>`).join("")}</div>
+      </button>
+    `).join("");
+    roleGrid.querySelectorAll(".role-card").forEach((card) => {
+      card.addEventListener("click", () => openDetail(card.dataset.role));
+    });
+  }
+
+  function openDetail(id) {
+    const r = ROLES.find((x) => x.id === id);
+    const scalePct = 22; // fixed visual reference point on the track for "entry range" framing
+    roleDetail.innerHTML = `
+      <button class="back-link" id="backToGrid">&larr; All careers</button>
+      <div class="detail">
+        <h2>${r.title}</h2>
+        <p class="hook">${r.hook}</p>
+        <div class="detail-grid">
+          <div>
+            <div class="panel">
+              <h4 class="eyebrow">A typical day</h4>
+              <p>${r.dayToDay}</p>
+            </div>
+            <div class="panel">
+              <h4 class="eyebrow">What entry-level candidates are expected to know</h4>
+              <ul>${r.entryExpectations.map((e) => `<li>${e}</li>`).join("")}</ul>
+            </div>
+            <div class="panel">
+              <h4 class="eyebrow">What makes a strong candidate</h4>
+              <p>${r.strongCandidate}</p>
+            </div>
+          </div>
+          <div>
+            <div class="panel">
+              <h4 class="eyebrow">Skills &amp; tools</h4>
+              <div class="tag-row">${r.skills.map((s) => `<span class="tag">${s}</span>`).join("")}</div>
+            </div>
+            <div class="panel">
+              <h4 class="eyebrow">Entry salary &amp; growth</h4>
+              <div class="salary-scale">
+                <div class="salary-track"><div class="salary-fill" style="width:${scalePct + 55}%;"></div></div>
+                <div class="salary-labels mono"><strong>${money(r.salary[0])}</strong><span>&ndash;</span><strong>${money(r.salary[1])}</strong></div>
+              </div>
+              <p style="margin-top:0.85rem; font-size:0.9rem; color:var(--ink-muted);">${r.salary[2]}</p>
+              <p class="data-note">General estimate &mdash; varies by market, company size, and negotiation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    roleGrid.style.display = "none";
+    roleDetail.style.display = "block";
+    document.getElementById("backToGrid").addEventListener("click", closeDetail);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function closeDetail() {
+    roleDetail.style.display = "none";
+    roleGrid.style.display = "grid";
+  }
+
+  // ---------------------------------------------------------------
+  // Interview Prep
+  // ---------------------------------------------------------------
+  const prepChips = document.getElementById("prepChips");
+  const prepProgress = document.getElementById("prepProgress");
+  const prepQuestions = document.getElementById("prepQuestions");
+  let activeRoleId = ROLES[0].id;
+
+  function renderChips() {
+    prepChips.innerHTML = ROLES.map((r) => `
+      <button class="role-chip ${r.id === activeRoleId ? "active" : ""}" data-role="${r.id}">${r.title.split(" / ")[0]}</button>
+    `).join("");
+    prepChips.querySelectorAll(".role-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        activeRoleId = chip.dataset.role;
+        renderChips();
+        renderQuestions();
+      });
+    });
+  }
+
+  function questionKey(roleId, kind, idx) { return `${roleId}:${kind}:${idx}`; }
+
+  function renderQuestions() {
+    const r = ROLES.find((x) => x.id === activeRoleId);
+    const answers = loadAnswers();
+    const allQs = [
+      ...r.behavioral.map((q, i) => ({ ...q, kind: "behavioral", idx: i })),
+      ...r.technical.map((q, i) => ({ ...q, kind: "technical", idx: i })),
+    ];
+    const answeredCount = allQs.filter((q) => (answers[questionKey(r.id, q.kind, q.idx)] || "").trim().length > 0).length;
+
+    prepProgress.innerHTML = `
+      <div class="bar"><div class="fill" style="width:${(answeredCount / allQs.length) * 100}%;"></div></div>
+      <span class="count mono">${answeredCount} of ${allQs.length} answered</span>
+    `;
+
+    function group(title, items, kind) {
+      return `
+        <h3 class="qgroup-title"><span class="eyebrow">${title}</span></h3>
+        ${items.map((q, i) => {
+          const key = questionKey(r.id, kind, i);
+          const saved = answers[key] || "";
+          return `
+          <div class="qcard">
+            <p class="qtext">&ldquo;${q.q}&rdquo;</p>
+            <textarea data-key="${key}" placeholder="Type your attempt here…">${saved}</textarea>
+            <div class="qfooter">
+              <button class="reveal-btn" data-target="${key}">See a strong answer</button>
+              <span class="saved-hint mono" data-hint="${key}">saved</span>
+            </div>
+            <div class="strong-answer" id="answer-${key}">
+              <span class="label">Strong answer</span>
+              ${q.a}
+            </div>
+          </div>`;
+        }).join("")}
+      `;
+    }
+
+    prepQuestions.innerHTML =
+      group("Behavioral", r.behavioral, "behavioral") +
+      group("Technical", r.technical, "technical");
+
+    prepQuestions.querySelectorAll("textarea").forEach((ta) => {
+      let timer = null;
+      ta.addEventListener("input", () => {
+        clearTimeout(timer);
+        const key = ta.dataset.key;
+        timer = setTimeout(() => {
+          saveAnswer(key, ta.value);
+          renderProgressOnly();
+          const hint = prepQuestions.querySelector(`.saved-hint[data-hint="${key}"]`);
+          if (hint) {
+            hint.classList.add("show");
+            clearTimeout(hint._t);
+            hint._t = setTimeout(() => hint.classList.remove("show"), 1200);
+          }
+        }, 400);
+      });
+    });
+
+    prepQuestions.querySelectorAll(".reveal-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const box = document.getElementById("answer-" + btn.dataset.target);
+        const open = box.classList.toggle("open");
+        btn.textContent = open ? "Hide strong answer" : "See a strong answer";
+      });
+    });
+  }
+
+  function renderProgressOnly() {
+    const r = ROLES.find((x) => x.id === activeRoleId);
+    const answers = loadAnswers();
+    const allQs = [
+      ...r.behavioral.map((q, i) => ({ kind: "behavioral", idx: i })),
+      ...r.technical.map((q, i) => ({ kind: "technical", idx: i })),
+    ];
+    const answeredCount = allQs.filter((q) => (answers[questionKey(r.id, q.kind, q.idx)] || "").trim().length > 0).length;
+    prepProgress.innerHTML = `
+      <div class="bar"><div class="fill" style="width:${(answeredCount / allQs.length) * 100}%;"></div></div>
+      <span class="count mono">${answeredCount} of ${allQs.length} answered</span>
+    `;
+  }
+
+  renderGrid();
+  renderChips();
+  renderQuestions();
+</script>
+</body>
+</html>
