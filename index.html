@@ -26,6 +26,12 @@
     --warn-tint: #fbf1de;
     --shadow: 0 1px 2px rgba(0,32,64,0.07), 0 8px 24px rgba(0,32,64,0.07);
     --shadow-lg: 0 24px 60px rgba(0,32,64,0.14);
+    /* Fixed BYU navy — deliberately does NOT change between themes. Used
+       where an element (the interview sidebar, primary buttons on a
+       gradient) needs to read as "always dark navy" regardless of the
+       site's own light/dark state, unlike --accent-strong which flips to
+       a bright blue in dark mode for text-on-dark-background contrast. */
+    --navy-fixed: #002e5d;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -91,6 +97,9 @@
 
   /* ---- Home hero ---- */
   .hero { padding: 4rem 0 2.5rem; text-align: center; }
+  .hero-title-row { display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 0.5rem; }
+  .hero-byu { font-family: "Sora", sans-serif; font-weight: 700; font-size: clamp(1.1rem, 3vw, 1.6rem); color: var(--ink-muted); }
+  .hero-byu .nav-divider { color: var(--border); font-weight: 400; margin-left: 0.5rem; }
   .hero h1 { font-size: clamp(2.75rem, 8vw, 4.75rem); font-weight: 700; margin: 0; letter-spacing: -0.03em; line-height: 0.98; }
   .hero h1 .is-pop { color: var(--accent); }
   .hero-sub { max-width: 50ch; margin: 1.2rem auto 0; color: var(--ink-muted); font-size: 1.2rem; }
@@ -138,7 +147,7 @@
   }
   @media (max-width: 860px) { .module-shell { grid-template-columns: 1fr; } }
   .module-side { padding: 2.4rem 2rem; background: var(--accent-tint); border-right: 1px solid var(--border); }
-  .module-side.dark { background: var(--accent-strong); color: #fff; }
+  .module-side.dark { background: var(--navy-fixed); color: #fff; }
   .module-side.dark .eyebrow { color: var(--highlight); }
   .module-side h3 { font-size: 1.7rem; margin: 0.9rem 0; letter-spacing: -0.02em; }
   .module-side p { color: var(--ink-muted); font-size: 0.95rem; }
@@ -148,6 +157,7 @@
 
   /* ---- Career explorer: simple grid + detail panel ---- */
   .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  #viewExplore #roleGrid { margin-top: 1.5rem; }
   .role-card {
     text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
     padding: 1.15rem 1.25rem 1.25rem; cursor: pointer; box-shadow: var(--shadow); min-height: 195px;
@@ -200,7 +210,7 @@
   .challenge h4 { margin: 0.6rem 0 1.1rem; font-size: 1.1rem; line-height: 1.4; font-weight: 600; }
   .challenge-actions { display: flex; justify-content: flex-end; }
   .btn-primary {
-    border: none; border-radius: 999px; padding: 0.65rem 1.1rem; background: #fff; color: var(--accent-strong);
+    border: none; border-radius: 999px; padding: 0.65rem 1.1rem; background: #fff; color: var(--navy-fixed);
     font-family: "Sora", sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer;
   }
   .btn-secondary {
@@ -248,6 +258,10 @@
     width: 100%; background: rgba(255,255,255,0.1); color: inherit; border: 1px solid rgba(255,255,255,0.35);
     border-radius: 10px; padding: 0.65rem 0.7rem; font: inherit; font-size: 0.88rem;
   }
+  /* The dropdown popup itself renders with a light system background in
+     every browser, regardless of the closed select's dark styling above —
+     without this, option text inherits white and becomes invisible. */
+  .role-select-wrap select option { color: #1c2530; background: #fff; }
   .interview-steps { display: flex; flex-direction: column; margin-top: 1.5rem; }
   .interview-steps button {
     display: grid; grid-template-columns: 30px 1fr; gap: 0.7rem; align-items: center; text-align: left;
@@ -315,7 +329,10 @@
   <!-- ============ HOME ============ -->
   <section id="viewHome" class="view active">
     <div class="hero">
-      <h1>this<span class="is-pop">IS</span>yourplace</h1>
+      <div class="hero-title-row">
+        <span class="hero-byu">BYU<span class="nav-divider">|</span></span>
+        <h1>this<span class="is-pop">IS</span>yourplace</h1>
+      </div>
       <p class="hero-sub">Every IS career path leads somewhere different. Find a career that's yours, then prepare for it.</p>
       <div class="place-buttons">
         <button class="place-btn place-btn-find" id="goDiscover">
